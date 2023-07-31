@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
         mongodb-version: ['5.0']
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
@@ -35,10 +35,10 @@ jobs:
     - run: cd ./api && npm install && cd ..
     - run: cd ./frontend && npm install
 
-    - run: cd api && npm test
+    - run: cd api && JWT_SECRET=f6d278bb34e1d0e146a80b16ec254c05 npm test
       env:
         CI: true
         
-    - run: cd ../api && npm test
+    - run: cd ../api && JWT_SECRET=f6d278bb34e1d0e146a80b16ec254c05 npm test
       env:
         CI: true
