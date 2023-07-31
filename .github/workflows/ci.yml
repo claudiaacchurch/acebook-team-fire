@@ -15,7 +15,6 @@ jobs:
       matrix:
         node-version: [18.x]
         mongodb-version: ['5.0']
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - name: Git checkout
