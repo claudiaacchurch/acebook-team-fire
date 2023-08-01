@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Acebook CI
 
 on:
   push:
@@ -42,5 +42,5 @@ jobs:
         
     - name: Test Frontend
       run: |
-        cd frontend && JWT_SECRET=f6d278bb34e1d0e146a80b16ec254c05 npm run build
-        npm run test
+        cd frontend && npm run build
+        JWT_SECRET=f6d278bb34e1d0e146a80b16ec254c05 && npm run test
