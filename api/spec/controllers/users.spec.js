@@ -8,25 +8,34 @@ describe("/users", () => {
     await User.deleteMany({});
   });
 
-  describe("POST, when email and password are provided", () => {
+  describe("POST, when email and password and username are provided", () => {
     test("the response code is 201", async () => {
       let response = await request(app)
         .post("/users")
-        .send({email: "poppy@email.com", password: "1234"})
+        .send({email: "poppy@email.com", password: "1234", username: "myusername"})
       expect(response.statusCode).toBe(201)
     })
 
     test("a user is created", async () => {
       await request(app)
         .post("/users")
-        .send({email: "scarlett@email.com", password: "1234"})
+        .send({email: "scarlett@email.com", password: "1234", username: "myusername"})
       let users = await User.find()
       let newUser = users[users.length - 1]
       expect(newUser.email).toEqual("scarlett@email.com")
     })
+
+    test("username added", async () => {
+      await request(app)
+        .post("/users")
+        .send({email: "scarlett@email.com", password: "1234", username: "myusername"})
+      let users = await User.find()
+      let newUser = users[users.length - 1]
+      expect(newUser.username).toEqual("myusername")
+    })
   })
 
-  describe("POST, when password is missing", () => {
+  describe("POST, when password and username is missing", () => {
     test("response code is 400", async () => {
       let response = await request(app)
         .post("/users")
@@ -34,10 +43,18 @@ describe("/users", () => {
       expect(response.statusCode).toBe(400)
     });
 
-    test("does not create a user", async () => {
+    test("does not create a user when password is missing", async () => {
       await request(app)
         .post("/users")
-        .send({email: "skye@email.com"})
+        .send({email: "skye@email.com", username: "myusername"})
+        let users = await User.find()
+        expect(users.length).toEqual(0)
+    });
+
+    test("does not create a user when username is missing", async () => {
+      await request(app)
+        .post("/users")
+        .send({email: "skye@email.com", password: "hello"})
         let users = await User.find()
         expect(users.length).toEqual(0)
     });

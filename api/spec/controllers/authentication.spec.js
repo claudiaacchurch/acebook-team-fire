@@ -3,9 +3,11 @@ const request = require("supertest");
 require("../mongodb_helper");
 const User = require('../../models/user');
 
+
+
 describe("/tokens", () => {
   beforeAll(async () => {
-    const user = new User({ email: "test@test.com", password: "12345678" })
+    const user = new User({ email: "test@test.com", password: "12345678", username: "myusername" })
 
     // We need to use `await` so the
     // "beforeAll" setup function waits for the
