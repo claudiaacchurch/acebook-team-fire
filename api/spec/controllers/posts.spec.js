@@ -44,10 +44,11 @@ describe("/posts", () => {
       await request(app)
         .post("/posts")
         .set("Authorization", `Bearer ${token}`)
-        .send({ message: "hello world", token: token });
+        .send({ message: "hello world", image:"picture.jpg", token: token });
       let posts = await Post.find();
       expect(posts.length).toEqual(1);
       expect(posts[0].message).toEqual("hello world");
+      expect(posts[0].image).toEqual("picture.jpg");
     });
   
     test("returns a new token", async () => {
