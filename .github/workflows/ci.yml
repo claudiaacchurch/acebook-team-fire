@@ -30,14 +30,21 @@ jobs:
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
         mongodb-replica-set: acebook_test
+        
 
-    - run: cd ./api && npm install && cd ..
-    - run: cd ./frontend && npm install
-
-    - run: cd api && JWT_SECRET=f6d278bb34e1d0e146a80b16ec254c05 npm test
+    - name: Install Deps
+      run: |
+        cd ./api && npm install && cd ..
+        cd ./frontend && npm install
+    
+    - name: Test API
+      run: cd api && JWT_SECRET=f6d278bb34e1d0e146a80b16ec254c05 npm test
       env:
         CI: true
         
-    - run: cd frontend && JWT_SECRET=f6d278bb34e1d0e146a80b16ec254c05 npm test
+    - name: Test Frontend
+      run: |
+        cd frontend && JWT_SECRET=f6d278bb34e1d0e146a80b16ec254c05 npm run build
+        npm run test
       env:
         CI: true
