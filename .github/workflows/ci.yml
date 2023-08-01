@@ -39,12 +39,8 @@ jobs:
     
     - name: Test API
       run: cd api && JWT_SECRET=f6d278bb34e1d0e146a80b16ec254c05 npm test
-      env:
-        CI: true
         
     - name: Test Frontend
       run: |
         cd frontend && JWT_SECRET=f6d278bb34e1d0e146a80b16ec254c05 npm run build
         npm run test
-      env:
-        CI: true
