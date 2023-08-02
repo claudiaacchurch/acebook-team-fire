@@ -2,6 +2,11 @@ const app = require("../../app");
 const request = require("supertest");
 require("../mongodb_helper");
 const User = require('../../models/user')
+const JWT = require('jsonwebtoken')
+const secret = process.env.JWT_SECRET
+
+let token
+let user
 
 describe("/users", () => {
   beforeEach( async () => {
@@ -75,5 +80,30 @@ describe("/users", () => {
       let users = await User.find()
       expect(users.length).toEqual(0)
     });
+  })
+})
+
+describe("GET /users/:id", () => {
+  beforeAll( async () => {
+    const user = new User({email: "test@test.com", password: "12345678", username: "myusername"});
+    await user.save();
+
+    token = JWT.sign({
+      user_id: user.id,
+      // Backdate this token of 5 minutes
+      iat: Math.floor(Date.now() / 1000) - (5 * 60),
+      // Set the JWT token to expire in 10 minutes
+      exp: Math.floor(Date.now() / 1000) + (10 * 60)
+    }, secret);
+  });
+  test('should return user info when authenticated and id matches', async () => {
+    let response = await request(app)
+      .get(`/users/${user.id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({token:token})
+    expect(response.statusCode).toEqual(200)
+    expect(response.body.email).toEqual("test@test.com")
+    expect(response.body.password).toEqual("12345678")
+    expect(response.body.username).toEqual("myusername")
   })
 })
