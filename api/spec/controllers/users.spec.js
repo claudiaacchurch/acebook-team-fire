@@ -25,6 +25,16 @@ describe("/users", () => {
       expect(newUser.email).toEqual("scarlett@email.com")
     })
 
+    test("when user created profile pic added ", async () => {
+      await request(app)
+        .post("/users")
+        .send({email: "scarlett@email.com", password: "1234", username: "myusername", profilePic: "sample.jpg"})
+      let users = await User.find()
+      let newUser = users[users.length - 1]
+      expect(newUser.email).toEqual("scarlett@email.com")
+      expect(newUser.profilePic).toEqual("sample.jpg")
+    })
+
     test("username added", async () => {
       await request(app)
         .post("/users")
