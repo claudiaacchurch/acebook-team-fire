@@ -157,5 +157,42 @@ describe("/posts", () => {
         .get("/posts");
       expect(response.body.token).toEqual(undefined);
     })
-  })
+  });
 });
+
+//when user authenticated, post is created and associated with User
+
+  test("creates a new post associated with user", async () => {
+    await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "hello world", image:"picture.jpg",  token: token });
+    let posts = await Post.find();
+    expect(posts.length).toEqual(1);
+    expect(posts[0].message).toEqual("hello world");
+    expect(posts[0].image).toEqual("picture.jpg");
+    expect(posts[0].email).toEqual("test@test.com");
+});
+
+
+// new user sign up and login, then a Post is made with the users email attached
+  //test("automatically adds authenticated User email into Post", async() => {
+  //await request(app)
+    //.post("/posts")
+   // .set("Authorization", `Bearer ${token}`)
+    //.send({ message: "hello world", image:"picture.jpg", token: token });
+    //let allPosts = await Post.find();
+    //expect(allPosts[0].email).toEqual("test@test.com");
+ // });
+
+
+
+   // test("find by a email", async () => {
+     // let post1 = new Post({message: "howdy!", email: "username@gmail.com"});
+      //let post2 = new Post({message: "hola!", email: "random@gmail.com"});
+     // await post1.save();
+     // await post2.save();
+     //// .get("/posts");
+//expect(response.body.token).toEqual(undefined);
+   // })
+   /// });
