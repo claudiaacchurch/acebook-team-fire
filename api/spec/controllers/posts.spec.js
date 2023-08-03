@@ -3,6 +3,7 @@ const request = require("supertest");
 require("../mongodb_helper");
 const Post = require('../../models/post');
 const User = require('../../models/user');
+const Comment = require('../../lib/comment');
 const JWT = require("jsonwebtoken");
 const secret = process.env.JWT_SECRET;
 
@@ -44,11 +45,12 @@ describe("/posts", () => {
       await request(app)
         .post("/posts")
         .set("Authorization", `Bearer ${token}`)
-        .send({ message: "hello world", image:"picture.jpg", token: token });
-      let posts = await Post.find();
+        .send({ message: "hello world", image:"picture.jpg", comments:[], token: token });
+      let posts = await Post.find().lean();
       expect(posts.length).toEqual(1);
       expect(posts[0].message).toEqual("hello world");
       expect(posts[0].image).toEqual("picture.jpg");
+      expect(posts[0].comments).toEqual([]);
     });
   
     test("returns a new token", async () => {
@@ -156,6 +158,21 @@ describe("/posts", () => {
       let response = await request(app)
         .get("/posts");
       expect(response.body.token).toEqual(undefined);
+    })
+  })
+
+  describe("Patch, when token is present", () => {
+    test("returns every post in the collection", async () => {
+      let post1 = new Post({message: "howdy!"});
+      let comment = new Comment("Test Text");
+      await post1.save();
+      let posts = await Post.find();
+      let response = await request(app)
+        .patch("/posts")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ id: posts[0]._id, comments: comment ,token: token});
+      posts = await Post.find();
+      expect(posts[0].comments[0]).toEqual(comment);;
     })
   })
 });
