@@ -64,14 +64,23 @@ describe("Post model", () => {
       });
     });
   });
-  test("updates by ID", async () => {
+  test("updates by ID for comments", async () => {
     let post1 = new Post({message: "howdy!", image: "picture.png", user: "64cb7d79486b9f0fc3404ed2"});
     comment = {text: "test"};
     await post1.save();
     posts = await Post.find();
-    await Post.updateOne({ _id: posts[0]._id }, { $push: { comments: comment } })
+    await Post.updateOne({ _id: posts[0]._id }, { $push: { comments: comment } });
     posts = await Post.find();
-    expect(posts[0].comments[0]).toEqual(comment);;
+    expect(posts[0].comments[0]).toEqual(comment);
+  })
+
+  test("updates by ID for likes", async () => {
+    let post1 = new Post({message: "howdy!", image: "picture.png", user: "64cb7d79486b9f0fc3404ed2"});
+    await post1.save();
+    posts = await Post.find();
+    await Post.updateOne({ _id: posts[0]._id }, { likes: 999 });
+    posts = await Post.find();
+    expect(posts[0].likes).toEqual(999);
   })
 });
 

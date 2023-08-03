@@ -153,10 +153,10 @@ describe("/posts", () => {
     })
 
   
-  describe("Patch, when token is present", () => {
+  describe("Patch for comments, when token is present", () => {
     test("updates correct post collection", async () => {
       let comment = new Comment("Test Text");
-       await request(app)
+      await request(app)
       .post("/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", comments: comment, token: token });
@@ -170,10 +170,10 @@ describe("/posts", () => {
     })
   })
 
-  describe("Patch, when token is not present", () => {
+  describe("Patch for comments, when token is not present", () => {
     test("the response code is 401", async () => {
       let comment = new Comment("Test Text");
-       await request(app)
+      await request(app)
       .post("/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", comments: comment, token: token });
@@ -187,8 +187,8 @@ describe("/posts", () => {
 
   describe("Patch, when no id is present", () => {
     test("returns 400 error with no id present message", async () => {
-     let comment = new Comment("Test Text");
-       await request(app)
+      let comment = new Comment("Test Text");
+      await request(app)
       .post("/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
@@ -216,6 +216,38 @@ describe("/posts", () => {
         .send({id: "456", giraffe: 'giraffe',token: token});
       expect(response.status).toEqual(400);
       expect(response.body.message).toEqual("property not found");
+    })
+  })
+
+  describe("Patch for likes, when token is present", () => {
+    test("updates likes count in correct post collection", async () => {
+      await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "new world", image: "picture.jpg", token: token });
+      let posts = await Post.find();
+      let response = await request(app)
+        .patch("/posts")
+        .set("Authorization", `Bearer ${token}`)
+        .send({ id: posts[0]._id, likes: 10 ,token: token});
+      posts = await Post.find();
+      expect(posts[0].likes).toEqual(10);
+    })
+  })
+
+  describe("Patch for likes, when token is not present", () => {
+    test("return status 401", async () => {
+      await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "new world", image: "picture.jpg", token: token });
+      let posts = await Post.find();
+      let response = await request(app)
+        .patch("/posts")
+        .send({ id: posts[0]._id, likes: 10 ,token: token});
+      posts = await Post.find();
+      expect(posts[0].likes).toEqual(0);
+      expect(response.status).toEqual(401);
     })
   })
 });
