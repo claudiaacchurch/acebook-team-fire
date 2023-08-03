@@ -39,15 +39,22 @@ const PostsController = {
       res.status(400).json({ message: 'id not present'});
     } else {
       if (req.body.hasOwnProperty('comments')){
-        const comments = req.body.comments;
-        Post.updateOne({_id:postId}, {$push:{comments: comments}}, (err) => {
+        Post.updateOne({_id:postId}, {$push:{comments: req.body.comments}}, (err) => {
           if (err) {
             throw err;
           }
           const token = TokenGenerator.jsonwebtoken(req.user_id)
           res.status(201).json({ message: 'OK', token: token });
         })
-      } else {
+      }else if(req.body.hasOwnProperty('likes')){
+        Post.updateOne({_id:postId}, {likes: req.body.likes}, (err) => {
+          if (err) {
+            throw err;
+          }
+          const token = TokenGenerator.jsonwebtoken(req.user_id)
+          res.status(201).json({ message: 'OK', token: token });
+        })
+      }else {
         res.status(400).json({ message: 'property not found'});
       }
     }
