@@ -65,7 +65,7 @@ describe("Post model", () => {
     });
   });
   test("updates by ID", async () => {
-    let post1 = new Post({message: "howdy!"});
+    let post1 = new Post({message: "howdy!", image: "picture.png", user: "64cb7d79486b9f0fc3404ed2"});
     comment = {text: "test"};
     await post1.save();
     posts = await Post.find();

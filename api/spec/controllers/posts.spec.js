@@ -191,7 +191,7 @@ describe("/posts", () => {
        await request(app)
       .post("/posts")
       .set("Authorization", `Bearer ${token}`)
-      .send({ message: "new world", image: "picture.jpg", comments: comment, token: token });
+      .send({ message: "new world", image: "picture.jpg", token: token });
       let response = await request(app)
         .patch("/posts")
         .set("Authorization", `Bearer ${token}`)
