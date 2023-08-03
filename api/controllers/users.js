@@ -25,7 +25,7 @@ const UsersController = {
     } else if (userID !== authenticated_user_id) {
       res.status(401).json({message: "Unauthorised User"})
     } else {
-      res.status(200).json({user})
+      res.status(200).json({username: user.username, email: user.email})
     }
     } catch (error) {
       console.error(error)

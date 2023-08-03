@@ -106,10 +106,10 @@ describe("GET /users/:id", () => {
     let response = await request(app) //defining the response -> to app -> route setup /users (happens in 101)
       .get(`/users/${user.id}`) // get request 
       .set('Authorization', `Bearer ${token}`) // sets the authorization header using the token
+    console.log(response.body)
     expect(response.statusCode).toEqual(200)
-    expect(response.body.user.email).toEqual("test@test.com")
-    expect(response.body.user.password).toEqual("12345678")
-    expect(response.body.user.username).toEqual("myusername")
+    expect(response.body.email).toEqual("test@test.com")
+    expect(response.body.username).toEqual("myusername")
   })
 
   test('non existant id', async () => {
@@ -130,4 +130,7 @@ describe("GET /users/:id", () => {
     .get(`/users/${mongoose.Types.ObjectId()}`)
     expect(response.statusCode).toEqual(401)
   })
+
+  // optional extra test. Create two users. 
+  // Attempt to access data from different user
 })
