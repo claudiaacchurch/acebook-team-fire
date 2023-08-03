@@ -50,8 +50,8 @@ app.use((req, res, next) => {
 });
 
 // error handler
-app.use((err, req, res) => {
-  
+app.use((err, _req, res, _) => {
+
   // respond with details of the error
   res.status(err.status || 500).json({message: 'server error'})
 });
