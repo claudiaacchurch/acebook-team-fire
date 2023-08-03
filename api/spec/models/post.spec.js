@@ -2,6 +2,7 @@ var mongoose = require("mongoose");
 
 require("../mongodb_helper");
 var Post = require("../../models/post");
+const { ObjectID } = require("mongodb");
 
 describe("Post model", () => {
   beforeEach((done) => {
@@ -37,4 +38,15 @@ describe("Post model", () => {
       });
     });
   });
+  test("updates by ID", async () => {
+    let post1 = new Post({message: "howdy!"});
+    comment = {text: "test"};
+    await post1.save();
+    posts = await Post.find();
+    await Post.updateOne({ _id: posts[0]._id }, { $push: { comments: comment } })
+    posts = await Post.find();
+    expect(posts[0].comments[0]).toEqual(comment);;
+  })
 });
+
+
