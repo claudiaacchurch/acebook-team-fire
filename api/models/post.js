@@ -4,7 +4,7 @@ const PostSchema = new mongoose.Schema({
   message: { type: String, required: true },
   image: String,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
-  likes: {type: Number, default: 0}
+  likes: {type: Number, default: 0},
   comments:[]
 });
 
