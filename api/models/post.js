@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const PostSchema = new mongoose.Schema({
-  message: String,
+  message: { type: String, required: true },
   image: String,
-  email: {type: String, ref: User}, 
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
   likes: {type: Number, default: 0}
 });
 

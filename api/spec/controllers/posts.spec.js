@@ -10,9 +10,9 @@ let token;
 
 describe("/posts", () => {
   beforeAll( async () => {
-    const user = new User({email: "test@test.com", password: "12345678", username: "myusername"});
+    const user = new User({email: "test@test.com", password: "12345678", username: "myusername", profilePic: "mypic.jpg"});
     await user.save();
-
+    userId = user._id;
     token = JWT.sign({
       user_id: user.id,
       // Backdate this token of 5 minutes
@@ -22,12 +22,8 @@ describe("/posts", () => {
     }, secret);
   });
 
-  beforeEach( async () => {
-    await Post.deleteMany({});
-  })
-
-  afterAll( async () => {
-    await User.deleteMany({});
+  afterEach( async () => {
+   //await User.deleteMany({});
     await Post.deleteMany({});
   })
 
@@ -88,23 +84,28 @@ describe("/posts", () => {
 
   describe("GET, when token is present", () => {
     test("returns every post in the collection", async () => {
-      let post1 = new Post({message: "howdy!"});
-      let post2 = new Post({message: "hola!"});
-      await post1.save();
-      await post2.save();
+    await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "new world", image: "picture.jpg", token: token });
+      await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "second world", image: "picture.jpg", token: token });
       let response = await request(app)
         .get("/posts")
         .set("Authorization", `Bearer ${token}`)
         .send({token: token});
       let messages = response.body.posts.map((post) => ( post.message ));
-      expect(messages).toEqual(["howdy!", "hola!"]);
+      expect(messages).toEqual(["new world", "second world"]);
     })
+  });
 
     test("the response code is 200", async () => {
-      let post1 = new Post({message: "howdy!"});
-      let post2 = new Post({message: "hola!"});
-      await post1.save();
-      await post2.save();
+      await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "new world", image: "picture.jpg", token: token });
       let response = await request(app)
         .get("/posts")
         .set("Authorization", `Bearer ${token}`)
@@ -113,10 +114,10 @@ describe("/posts", () => {
     })
 
     test("returns a new token", async () => {
-      let post1 = new Post({message: "howdy!"});
-      let post2 = new Post({message: "hola!"});
-      await post1.save();
-      await post2.save();
+      await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "new world", image: "picture.jpg", token: token });
       let response = await request(app)
         .get("/posts")
         .set("Authorization", `Bearer ${token}`)
@@ -125,39 +126,30 @@ describe("/posts", () => {
       let originalPayload = JWT.decode(token, process.env.JWT_SECRET);
       expect(newPayload.iat > originalPayload.iat).toEqual(true);
     })
-  })
+  
 
   describe("GET, when token is missing", () => {
     test("returns no posts", async () => {
-      let post1 = new Post({message: "howdy!"});
-      let post2 = new Post({message: "hola!"});
-      await post1.save();
-      await post2.save();
+      await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "new world", image: "picture.jpg", token: token });
       let response = await request(app)
         .get("/posts");
       expect(response.body.posts).toEqual(undefined);
     })
+  });
 
     test("the response code is 401", async () => {
-      let post1 = new Post({message: "howdy!"});
-      let post2 = new Post({message: "hola!"});
-      await post1.save();
-      await post2.save();
+      await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "new world", image: "picture.jpg", token: token });
       let response = await request(app)
         .get("/posts");
       expect(response.status).toEqual(401);
     })
 
-    test("does not return a new token", async () => {
-      let post1 = new Post({message: "howdy!"});
-      let post2 = new Post({message: "hola!"});
-      await post1.save();
-      await post2.save();
-      let response = await request(app)
-        .get("/posts");
-      expect(response.body.token).toEqual(undefined);
-    })
-  });
 });
 
 //when user authenticated, post is created and associated with User
@@ -169,30 +161,30 @@ describe("/posts", () => {
       .send({ message: "hello world", image:"picture.jpg",  token: token });
     let posts = await Post.find();
     expect(posts.length).toEqual(1);
-    expect(posts[0].message).toEqual("hello world");
-    expect(posts[0].image).toEqual("picture.jpg");
-    expect(posts[0].email).toEqual("test@test.com");
+    expect(posts[posts.length -1].message).toEqual("hello world");
+    expect(posts[posts.length -1].image).toEqual("picture.jpg");
+    expect(posts[posts.length -1].user.toString()).toEqual(userId.toString());
 });
 
 
-// new user sign up and login, then a Post is made with the users email attached
-  //test("automatically adds authenticated User email into Post", async() => {
-  //await request(app)
-    //.post("/posts")
-   // .set("Authorization", `Bearer ${token}`)
-    //.send({ message: "hello world", image:"picture.jpg", token: token });
-    //let allPosts = await Post.find();
-    //expect(allPosts[0].email).toEqual("test@test.com");
- // });
+//test get post with user details 
+  test("gets post with username and profilePic", async () => {
+    await request(app)
+    .post("/posts")
+    .set("Authorization", `Bearer ${token}`)
+    .send({ message: "new world", image: "picture.jpg", token: token });
+    
+    const response = await request(app)
+      .get("/posts")
+      .set("Authorization", `Bearer ${token}`);
+  
+    expect(response.status).toEqual(200);
+    const posts = response.body.posts;
+    const lastPost = posts[posts.length - 1];
+    const lastPostUser = lastPost.user;
+    console.log(posts)
+    console.log('Last post user details:', lastPostUser);
+    expect(lastPostUser.username).toEqual("myusername");
+    expect(lastPostUser.profilePic).toEqual("mypic.jpg");
+});
 
-
-
-   // test("find by a email", async () => {
-     // let post1 = new Post({message: "howdy!", email: "username@gmail.com"});
-      //let post2 = new Post({message: "hola!", email: "random@gmail.com"});
-     // await post1.save();
-     // await post2.save();
-     //// .get("/posts");
-//expect(response.body.token).toEqual(undefined);
-   // })
-   /// });

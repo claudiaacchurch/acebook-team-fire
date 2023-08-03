@@ -15,6 +15,9 @@ class TokenGenerator {
       exp: Math.floor(Date.now() / 1000) + (10 * 60)
     }, secret);
   }
-}
 
+  static verify(token) {
+    return JWT.verify(token, process.env.JWT_SECRET)
+  }
+}
 module.exports = TokenGenerator;
