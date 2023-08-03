@@ -22,4 +22,5 @@ const AuthenticationController = {
   }
 };
 
+
 module.exports = AuthenticationController;
