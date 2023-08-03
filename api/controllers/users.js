@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const TokenGenerator = require("../lib/token_generator");
 
 const UsersController = {
   Create: (req, res) => {
@@ -11,6 +12,27 @@ const UsersController = {
       }
     });
   },
+  GetUserByID: async (req, res) => {
+    const userID = req.params.id
+    console.log(`User id from params = ${userID}`)
+    const authenticated_user_id = req.user_id
+    console.log(`Token user ID = ${authenticated_user_id}`)
+
+    try {
+      const user = await User.findById(userID)
+    if (! user) {
+      res.status(404).json({message: 'User not found'})
+    } else if (userID !== authenticated_user_id) {
+      res.status(401).json({message: "Unauthorised User"})
+    } else {
+      res.status(200).json({username: user.username, email: user.email})
+    }
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({message: 'server error'})
+    }
+    
+  }
 };
 
 module.exports = UsersController;
