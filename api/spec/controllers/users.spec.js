@@ -1,12 +1,13 @@
 const app = require("../../app");
+const mongoose = require('mongoose');
 const request = require("supertest");
 require("../mongodb_helper");
 const User = require('../../models/user')
 const JWT = require('jsonwebtoken')
 const secret = process.env.JWT_SECRET
 
-let token
-let user
+let token;
+let user;
 
 describe("/users", () => {
   beforeEach( async () => {
@@ -96,6 +97,11 @@ describe("GET /users/:id", () => {
       exp: Math.floor(Date.now() / 1000) + (10 * 60)
     }, secret);
   });
+
+  afterAll( async () => {
+    await User.deleteMany({})
+  });
+
   test('should return user info when authenticated and id matches', async () => {
     let response = await request(app) //defining the response -> to app -> route setup /users (happens in 101)
       .get(`/users/${user.id}`) // get request 
@@ -108,8 +114,20 @@ describe("GET /users/:id", () => {
 
   test('non existant id', async () => {
     let response = await request(app)
-      .get("/users/1234")
+      .get(`/users/${mongoose.Types.ObjectId()}`)
       .set('Authorization', `Bearer ${token}`)
     expect(response.statusCode).toEqual(404)
+  })
+
+  test('no token', async () => {
+    let response = await request(app)
+    .get(`/users/${user.id}`)
+    expect(response.statusCode).toEqual(401)
+  })
+
+  test('no token and unauthorised user', async () => {
+    let response = await request(app)
+    .get(`/users/${mongoose.Types.ObjectId()}`)
+    expect(response.statusCode).toEqual(401)
   })
 })
