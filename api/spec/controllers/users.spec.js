@@ -85,7 +85,7 @@ describe("/users", () => {
 
 describe("GET /users/:id", () => {
   beforeAll( async () => {
-    const user = new User({email: "test@test.com", password: "12345678", username: "myusername"});
+    user = new User({email: "test@test.com", password: "12345678", username: "myusername"});
     await user.save();
 
     token = JWT.sign({
@@ -97,13 +97,19 @@ describe("GET /users/:id", () => {
     }, secret);
   });
   test('should return user info when authenticated and id matches', async () => {
-    let response = await request(app)
-      .get(`/users/${user.id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send({token:token})
+    let response = await request(app) //defining the response -> to app -> route setup /users (happens in 101)
+      .get(`/users/${user.id}`) // get request 
+      .set('Authorization', `Bearer ${token}`) // sets the authorization header using the token
     expect(response.statusCode).toEqual(200)
-    expect(response.body.email).toEqual("test@test.com")
-    expect(response.body.password).toEqual("12345678")
-    expect(response.body.username).toEqual("myusername")
+    expect(response.body.user.email).toEqual("test@test.com")
+    expect(response.body.user.password).toEqual("12345678")
+    expect(response.body.user.username).toEqual("myusername")
+  })
+
+  test('non existant id', async () => {
+    let response = await request(app)
+      .get("/users/1234")
+      .set('Authorization', `Bearer ${token}`)
+    expect(response.statusCode).toEqual(404)
   })
 })

@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const TokenGenerator = require("../lib/token_generator");
 
 const UsersController = {
   Create: (req, res) => {
@@ -13,6 +14,10 @@ const UsersController = {
   },
   GetUserByID: async (req, res) => {
     const user = await User.findById(req.params.id)
+    console.log(user)
+    if (! user) {
+      res.status(404)
+    }
     res.status(200).json({user})
   }
 };
