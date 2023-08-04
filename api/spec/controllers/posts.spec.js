@@ -282,8 +282,6 @@ describe("/posts", () => {
     const posts = response.body.posts;
     const lastPost = posts[posts.length - 1];
     const lastPostUser = lastPost.user;
-    console.log(posts)
-    console.log('Last post user details:', lastPostUser);
     expect(lastPostUser.username).toEqual("myusername");
     expect(lastPostUser.profilePic).toEqual("mypic.jpg");
 });
