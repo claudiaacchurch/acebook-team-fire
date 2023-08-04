@@ -12,7 +12,9 @@ let token;
 describe("/posts", () => {
   beforeAll( async () => {
     const user = new User({email: "test@test.com", password: "12345678", username: "myusername", profilePic: "mypic.jpg"});
-    await user.save();
+    user.save(err => {
+      
+    })
     userId = user._id;
     token = JWT.sign({
       user_id: user.id,
@@ -24,9 +26,13 @@ describe("/posts", () => {
   });
 
   afterEach( async () => {
-   //await User.deleteMany({});
+    //await User.deleteMany({});
     await Post.deleteMany({});
   })
+
+  // afterAll( async () => {
+  //   await User.deleteMany({});
+  //  })
 
   describe("POST, when token is present", () => {
     test("responds with a 201", async () => {
@@ -266,7 +272,6 @@ describe("/posts", () => {
     expect(posts[posts.length -1].user.toString()).toEqual(userId.toString());
 });
 
-
 //test get post with user details 
   test("gets post with username and profilePic", async () => {
     await request(app)
@@ -280,9 +285,8 @@ describe("/posts", () => {
   
     expect(response.status).toEqual(200);
     const posts = response.body.posts;
-    const lastPost = posts[posts.length - 1];
-    const lastPostUser = lastPost.user;
-    expect(lastPostUser.username).toEqual("myusername");
-    expect(lastPostUser.profilePic).toEqual("mypic.jpg");
+    const lastPostUser = posts[posts.length - 1]
+    expect(lastPostUser.user.username).toEqual("myusername");
+    expect(lastPostUser.user.profilePic).toEqual("mypic.jpg");
 });
 

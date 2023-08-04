@@ -14,9 +14,7 @@ const UsersController = {
   },
   GetUserByID: async (req, res) => {
     const userID = req.params.id
-    console.log(`User id from params = ${userID}`)
     const authenticated_user_id = req.user_id
-    console.log(`Token user ID = ${authenticated_user_id}`)
 
     try {
       const user = await User.findById(userID)
