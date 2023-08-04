@@ -16,6 +16,11 @@ describe("Post model", () => {
     userId = user._id;
   });
 
+  afterEach( async () => {
+    //await User.deleteMany({});
+    await Post.deleteMany({});
+   })
+
   it("has a user", () => {
     var post = new Post({ message: "some message", user: userId });
     expect(post.user.toString()).toEqual(userId.toString());
