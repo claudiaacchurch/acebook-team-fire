@@ -205,9 +205,30 @@ describe("/posts", () => {
         .set("Authorization", `Bearer ${token}`)
         .send({comments: comment ,token: token});
       let secondPosts = await Post.find();
-      console.log("POSTS", secondPosts)
       expect(response.status).toEqual(201);
       expect(secondPosts[0].comments.length).toEqual(1);
+    })
+  })
+
+  describe("Patch, test datetime creation", () => {
+    test("returns the date and time when comment was created", async () => {
+      const comment = {"text": "Test Text"};
+      await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "new world", image: "picture.jpg", token: token });
+      let posts = await Post.find();
+      let response = await request(app)
+        .patch(`/posts/${posts[posts.length -1]._id}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({comments: comment ,token: token});
+      let secondPosts = await Post.find();
+      const lastPost = secondPosts[secondPosts.length - 1];
+      const lastComment = lastPost.comments[lastPost.comments.length - 1];
+      console.log("DATE", lastComment.commentDate);
+      expect(lastComment.commentDate.getHours()).toEqual(18);
+      expect(response.status).toEqual(201);
+      expect(lastPost.comments.length).toEqual(1);
     })
   })
 

@@ -7,7 +7,6 @@ const PostsController = {
     const posts = await Post.find()
     const postWithUserDetails = await Promise.all(posts.map(async post => {
       const user = await User.findById(post.user);
-      console.log(post.user)
       return { 
         message: post.message,
         image: post.image,
@@ -37,13 +36,12 @@ UpdateById: (req, res) => {
   const token = req.headers.authorization.replace("Bearer ", "");
   const { user_id: authorId } = TokenGenerator.verify(token);
   const postId = req.params.id; 
-  const theDate = Date.now();
 
   if (req.body.hasOwnProperty('comments')) {
     const comment = {
       text: req.body.comments.text,
       authorId: authorId,
-      dateTime: theDate
+      commentDate: new Date()
     };
     Post.updateOne({ _id: postId }, { $push: { comments: comment } }, (err) => {
       if (err) {

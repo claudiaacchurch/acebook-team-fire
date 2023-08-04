@@ -9,7 +9,7 @@ const PostSchema = new mongoose.Schema({
     {
       authorId: { type: String},
       text: { type: String},
-      date: { type: Date}
+      commentDate: { type: Date }
     }
   ]
 });

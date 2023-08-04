@@ -116,7 +116,6 @@ describe("GET /users/:id", () => {
     let response = await request(app) //defining the response -> to app -> route setup /users (happens in 101)
       .get(`/users/${user.id}`) // get request 
       .set('Authorization', `Bearer ${token}`) // sets the authorization header using the token
-    console.log(response.body)
     expect(response.statusCode).toEqual(200)
     expect(response.body.email).toEqual("test@test.com")
     expect(response.body.username).toEqual("myusername")
