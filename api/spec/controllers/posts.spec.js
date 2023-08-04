@@ -272,7 +272,6 @@ describe("/posts", () => {
     expect(posts[posts.length -1].user.toString()).toEqual(userId.toString());
 });
 
-
 //test get post with user details 
   test("gets post with username and profilePic", async () => {
     await request(app)
