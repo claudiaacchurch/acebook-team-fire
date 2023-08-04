@@ -33,32 +33,35 @@ const PostsController = {
   });
 },
 
-  UpdateById: (req, res) => {
-    const postId = req.body.id;
-    if (req.body.hasOwnProperty('id') === false){
-      res.status(400).json({ message: 'id not present'});
-    } else {
-      if (req.body.hasOwnProperty('comments')){
-        Post.updateOne({_id:postId}, {$push:{comments: req.body.comments}}, (err) => {
-          if (err) {
-            throw err;
-          }
-          const token = TokenGenerator.jsonwebtoken(req.user_id)
-          res.status(201).json({ message: 'OK', token: token });
-        })
-      }else if(req.body.hasOwnProperty('likes')){
-        Post.updateOne({_id:postId}, {likes: req.body.likes}, (err) => {
-          if (err) {
-            throw err;
-          }
-          const token = TokenGenerator.jsonwebtoken(req.user_id)
-          res.status(201).json({ message: 'OK', token: token });
-        })
-      }else {
-        res.status(400).json({ message: 'property not found'});
+UpdateById: (req, res) => {
+  const token = req.headers.authorization.replace("Bearer ", "");
+  const { user_id: authorId } = TokenGenerator.verify(token);
+  const postId = req.params.id; 
+  const theDate = Date.now();
+
+  if (req.body.hasOwnProperty('comments')) {
+    const comment = {
+      text: req.body.comments.text,
+      authorId: authorId,
+      dateTime: theDate
+    };
+    Post.updateOne({ _id: postId }, { $push: { comments: comment } }, (err) => {
+      if (err) {
+        throw err;
       }
-    }
+      const token = TokenGenerator.jsonwebtoken(req.user_id);
+      res.status(201).json({ message: 'OK', token: token });
+    });
+  } else if (req.body.hasOwnProperty('likes')) {
+    Post.updateOne({ _id: postId }, { likes: req.body.likes }, (err) => {
+      if (err) {
+        throw err;
+      }
+      const token = TokenGenerator.jsonwebtoken(req.user_id);
+      res.status(201).json({ message: 'OK', token: token });
+    });
   }
+}
 };
 
 

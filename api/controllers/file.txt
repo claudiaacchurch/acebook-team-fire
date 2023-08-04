@@ -1,3 +1,5 @@
+
+
   UpdateById: (req, res) => {
     const token = req.headers.authorization.replace("Bearer ", "")
     const {user_id: authorId}= TokenGenerator.verify(token)
@@ -28,4 +30,4 @@
       }
     }
   }
-};
+;

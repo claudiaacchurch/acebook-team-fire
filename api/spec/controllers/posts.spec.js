@@ -161,67 +161,53 @@ describe("/posts", () => {
   
   describe("Patch for comments, when token is present", () => {
     test("updates correct post collection", async () => {
-      let comment = new Comment("Test Text");
+      const commentText = "Test Text";
       await request(app)
       .post("/posts")
       .set("Authorization", `Bearer ${token}`)
-      .send({ message: "new world", image: "picture.jpg", comments: comment, token: token });
+      .send({ message: "new world", image: "picture.jpg", token: token });
       let posts = await Post.find();
-      let response = await request(app)
-        .patch("/posts")
+      const comment = { text: commentText};
+      await request(app)
+        .patch(`/posts/${posts[0]._id}`)
         .set("Authorization", `Bearer ${token}`)
-        .send({ id: posts[0]._id, comments: comment ,token: token});
+        .send({comments: comment ,token: token});
       posts = await Post.find();
-      expect(posts[0].comments[0]).toEqual(comment);;
+      expect(posts[posts.length-1].comments[0].text).toEqual(commentText);;
     })
   })
 
   describe("Patch for comments, when token is not present", () => {
     test("the response code is 401", async () => {
-      let comment = new Comment("Test Text");
+      const comment = {"text": "Test Text"};
       await request(app)
       .post("/posts")
       .set("Authorization", `Bearer ${token}`)
-      .send({ message: "new world", image: "picture.jpg", comments: comment, token: token });
+      .send({ message: "new world", image: "picture.jpg", token: token });
       let posts = await Post.find();
       let response = await request(app)
-        .patch("/posts")
+        .patch(`/posts/${posts[posts.length -1]._id}`)
         .send({ id: posts[0]._id, comments: comment ,token: token});
       expect(response.status).toEqual(401);
     })
   })
 
-  describe("Patch, when no id is present", () => {
-    test("returns 400 error with no id present message", async () => {
-      let comment = new Comment("Test Text");
+  describe("Patch, when id passed as param", () => {
+    test("returns 201 and comment length to equal 1", async () => {
+      const comment = {"text": "Test Text"};
       await request(app)
       .post("/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
+      let posts = await Post.find();
       let response = await request(app)
-        .patch("/posts")
+        .patch(`/posts/${posts[posts.length -1]._id}`)
         .set("Authorization", `Bearer ${token}`)
         .send({comments: comment ,token: token});
-      posts = await Post.find();
-      expect(response.status).toEqual(400);
-      expect(response.body.message).toEqual("id not present");
-      expect(posts[0].comments.length).toEqual(0);
-    })
-  })
-
-  describe("Patch, when collection property does not exist", () => {
-    test("returns 400 error with property not found message", async () => {
-      let comment = new Comment("Test Text");
-       await request(app)
-      .post("/posts")
-      .set("Authorization", `Bearer ${token}`)
-      .send({ message: "new world", image: "picture.jpg", comments: comment, token: token });
-      let response = await request(app)
-        .patch("/posts")
-        .set("Authorization", `Bearer ${token}`)
-        .send({id: "456", giraffe: 'giraffe',token: token});
-      expect(response.status).toEqual(400);
-      expect(response.body.message).toEqual("property not found");
+      let secondPosts = await Post.find();
+      console.log("POSTS", secondPosts)
+      expect(response.status).toEqual(201);
+      expect(secondPosts[0].comments.length).toEqual(1);
     })
   })
 
@@ -233,9 +219,9 @@ describe("/posts", () => {
       .send({ message: "new world", image: "picture.jpg", token: token });
       let posts = await Post.find();
       let response = await request(app)
-        .patch("/posts")
+      .patch(`/posts/${posts[posts.length -1]._id}`)
         .set("Authorization", `Bearer ${token}`)
-        .send({ id: posts[0]._id, likes: 10 ,token: token});
+        .send({likes: 10 ,token: token});
       posts = await Post.find();
       expect(posts[0].likes).toEqual(10);
     })
@@ -249,8 +235,8 @@ describe("/posts", () => {
       .send({ message: "new world", image: "picture.jpg", token: token });
       let posts = await Post.find();
       let response = await request(app)
-        .patch("/posts")
-        .send({ id: posts[0]._id, likes: 10 ,token: token});
+      .patch(`/posts/${posts[posts.length -1]._id}`)
+        .send({likes: 10 ,token: token});
       posts = await Post.find();
       expect(posts[0].likes).toEqual(0);
       expect(response.status).toEqual(401);
