@@ -5,7 +5,7 @@ const AuthenticationController = {
   Authenticate: (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-
+    
     User.findOne({ email: email }).then((user) => {
       if (!user) {
         console.log("auth error: user not found");
@@ -21,5 +21,6 @@ const AuthenticationController = {
     });
   },
 };
+
 
 module.exports = AuthenticationController;
