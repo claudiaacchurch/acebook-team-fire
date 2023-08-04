@@ -178,7 +178,7 @@ export default function Navbar({ navigate }) {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            MUI
+            Acebook Fire
           </Typography>
           <Search>
             <SearchIconWrapper>
