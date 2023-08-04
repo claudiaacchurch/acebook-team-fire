@@ -13,22 +13,6 @@ const tokenChecker = require("./middleware/tokenChecker")
 
 const app = express();
 
-// MongoDB connection function
-async function connectToDatabase() {
-  try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-
-    console.log('Connected to the database');
-  } catch (err) {
-    console.error('Error connecting to the database', err);
-  }
-}
-
-// Call the database connection function
-connectToDatabase();
 
 // setup for receiving JSON
 app.use(express.json())
