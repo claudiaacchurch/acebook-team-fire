@@ -25,3 +25,11 @@ describe("Feed", () => {
     })
   })
 })
+
+describe ("Create post component", () =>{
+  it ("")
+
+
+
+
+})

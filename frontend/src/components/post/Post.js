@@ -40,7 +40,7 @@ const Post = ({ post }) => {
   } else {
     return (
       <Card
-        sx={{ maxWidth: 400, minWidth: 345 }}
+        sx={{ maxWidth: 400, minWidth: 400 }}
         style={{ marginBottom: "10px" }}
       >
         <CardActionArea>

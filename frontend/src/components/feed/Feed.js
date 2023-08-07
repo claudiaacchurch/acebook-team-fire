@@ -17,11 +17,6 @@ const CreatePost = ({ setPosts, token, setToken }) => {
   const submitPost = (e) => {
     e.preventDefault();
 
-    const message = messageRef.current;
-    const image = imageLinkRef.current.value;
-
-    console.log(message, image);
-
     fetch("/posts", {
       method: "POST",
       headers: {
@@ -33,14 +28,13 @@ const CreatePost = ({ setPosts, token, setToken }) => {
         image,
       }),
     }).then((res) => {
-      if (res.status === 200) {
-        setPosts((previous) => [
-          ...previous,
+      if (res.status === 201) {
+        setPosts((prev) => [
           {
             message,
             image,
-            user: { username: "Bradley", profilePic: "https://google.com" },
-          },
+            user: { username: "username", profilePic: "https://google.com" },
+          }, ...prev
         ]);
 
         res.json().then((data) => {
@@ -66,7 +60,7 @@ const CreatePost = ({ setPosts, token, setToken }) => {
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <TextField
-                  onChange={(e) => update}
+                  onChange={(e) => updateMessage(e.target.value)}
                   multiline
                   rows={2}
                   placeholder="What's on your mind today?"
@@ -77,7 +71,9 @@ const CreatePost = ({ setPosts, token, setToken }) => {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  ref={imageLinkRef}
+                  onChange={(e) => {
+                    updateImage(e.target.value);
+                  }}
                   rows={1}
                   placeholder="Image URL"
                   variant="outlined"
@@ -119,8 +115,12 @@ const Feed = ({ navigate }) => {
         .then(async (data) => {
           window.localStorage.setItem("token", data.token);
           setToken(window.localStorage.getItem("token"));
-          setPosts(data.posts);
+          const postData = data.posts.reverse();
+          console.log(postData);
+          setPosts(postData);
         });
+    } else {
+      navigate("/login");
     }
   }, []);
 
@@ -130,7 +130,11 @@ const Feed = ({ navigate }) => {
         <Navbar navigate={navigate} />
         <div id="feed" role="feed">
           <h3>Welcome back! here's what you missed</h3>
-          <CreatePost setPosts={setPosts} token={token} setToken={setToken} />
+          <CreatePost
+            setPosts={setPosts}
+            token={token}
+            setToken={setToken}
+          />
           <Grid
             container
             spacing={0}
