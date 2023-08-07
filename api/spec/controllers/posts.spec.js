@@ -7,6 +7,7 @@ const Comment = require('../../lib/comment');
 const JWT = require("jsonwebtoken");
 const secret = process.env.JWT_SECRET;
 
+let theDate = new Date()
 let token;
 
 describe("/posts", () => {
@@ -210,27 +211,26 @@ describe("/posts", () => {
     })
   })
 
-  // describe("Patch, test datetime creation", () => {
-  //   test("returns the date and time when comment was created", async () => {
-  //     const comment = {"text": "Test Text"};
-  //     await request(app)
-  //     .post("/posts")
-  //     .set("Authorization", `Bearer ${token}`)
-  //     .send({ message: "new world", image: "picture.jpg", token: token });
-  //     let posts = await Post.find();
-  //     let response = await request(app)
-  //       .patch(`/posts/${posts[posts.length -1]._id}`)
-  //       .set("Authorization", `Bearer ${token}`)
-  //       .send({comments: comment ,token: token});
-  //     let secondPosts = await Post.find();
-  //     const lastPost = secondPosts[secondPosts.length - 1];
-  //     const lastComment = lastPost.comments[lastPost.comments.length - 1];
-  //     console.log("DATE", lastComment.commentDate);
-  //     expect(lastComment.commentDate.getHours()).toEqual(18);
-  //     expect(response.status).toEqual(201);
-  //     expect(lastPost.comments.length).toEqual(1);
-  //   })
-  // })
+  describe("Patch, test datetime creation", () => {
+    test("returns the date and time when comment was created", async () => {
+      const comment = {"text": "Test Text"};
+      await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "new world", image: "picture.jpg", token: token });
+      let posts = await Post.find();
+      let response = await request(app)
+        .patch(`/posts/${posts[posts.length -1]._id}`)
+        .set("Authorization", `Bearer ${token}`)
+        .send({comments: comment ,token: token});
+      let secondPosts = await Post.find();
+      const lastPost = secondPosts[secondPosts.length - 1];
+      const lastComment = lastPost.comments[lastPost.comments.length - 1];
+      expect(lastComment.commentDate.getDate()).toEqual(theDate.getDate());
+      expect(response.status).toEqual(201);
+      expect(lastPost.comments.length).toEqual(1);
+    })
+  })
 
   describe("Patch for likes, when token is present", () => {
     test("updates likes count in correct post collection", async () => {
