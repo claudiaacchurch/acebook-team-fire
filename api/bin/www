@@ -14,6 +14,7 @@ var app = require("../app");
 var debug = require("debug")("acebook:server");
 var http = require("http");
 var mongoose = require("mongoose");
+require('dotenv').config();
 
 /**
  * Get port from environment and store in Express.
@@ -26,7 +27,9 @@ app.set("port", port);
  * Connect to MongoDB
  **/
 
-var mongoDbUrl = process.env.MONGODB_URL || "mongodb://0.0.0.0/acebook";
+const uri = process.env.MONGODB_URI
+
+var mongoDbUrl = process.env.MONGODB_URI || "mongodb://0.0.0.0/acebook";
 mongoose.connect(mongoDbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,

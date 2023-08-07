@@ -11,11 +11,13 @@ const tokenChecker = (req, res, next) => {
   
     JWT.verify(token, process.env.JWT_SECRET, (err, payload) => {
       if(err) {
+<<<<<<< HEAD
         //console.log(err)
+=======
+>>>>>>> 989d7b0a11d893f40fa1e8f52bdfc0500f2690fd
         res.status(401).json({message: "auth error"});
       } else {
         req.user_id = payload.user_id;
-        // console.log(`this is ${req.user_id}`)
         next();
       }
     });
