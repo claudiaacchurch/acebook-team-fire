@@ -4,6 +4,7 @@ const path = require("path");
 const logger = require("morgan");
 const JWT = require("jsonwebtoken");
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 
 const postsRouter = require("./routes/posts");
@@ -13,6 +14,8 @@ const tokenChecker = require("./middleware/tokenChecker")
 
 const app = express();
 
+//cors
+app.use(cors())
 
 // setup for receiving JSON
 app.use(express.json())
@@ -20,6 +23,8 @@ app.use(express.json())
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+
+
 
 
 // route setup
