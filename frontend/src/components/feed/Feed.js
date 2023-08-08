@@ -19,7 +19,7 @@ const CreatePost = ({ setPosts, token, setToken }) => {
     e.preventDefault();
 
     if(!message && !image){
-      setError("There is no content")
+      setError("There is no content!")
 
     }else{
 
@@ -102,7 +102,7 @@ const CreatePost = ({ setPosts, token, setToken }) => {
             </Grid>
           </form>
               {/* Error message */}
-              {error && <Typography color="error">{error}</Typography>}
+              {error && <Typography color="error" data-cy="post">{error}</Typography>}
         </CardContent>
       </Card>
     </Grid>

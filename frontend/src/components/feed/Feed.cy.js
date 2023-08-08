@@ -42,8 +42,7 @@ describe("CreatePost",() =>{
       }).as("submitPost");
 
     //passing fake props to CreatePost
-    cy.mount(< CreatePost setPosts ={()=> {}
-  }token = "fakeToken" setToken={()=> {}}/>);
+    cy.mount(< Feed navigate={navigate}/>);
   //text  in input field, then click submit (\)for indicate its nota  closing '
   cy.get('[placeholder="What\'s on your mind today?"]').type("This is a new post");
   cy.contains("Submit").click();
@@ -55,14 +54,18 @@ describe("CreatePost",() =>{
   })
 });
 
-// describe("CreastePost with no content",() =>{
-//   it("return msg There is no content!", ()=> {
-//     cy.get('[placeholder="What\'s on your mind today?"]').type("");
-//     cy.contains("Submit").click();
+describe("CreastePost with no content",() =>{
+  it("return msg There is no content!", ()=> {
+    window.localStorage.setItem("token","fakeToken")
 
-//     cy.wait("@submitPost").then(()=>{
-//     cy.get('[data-cy="err"]')
-//       .should('contain.text',"There is no content!");
-//     });
-//   });
-// });
+    cy.mount(< Feed navigate={navigate}/>);
+
+    // cy.get('[placeholder="What\'s on your mind today?"]').type("");
+    // cy.get('[placeholder="Image URL"]').type("");
+    cy.contains("Submit").click();
+
+    // cy.wait("@submitPost").then(()=>{
+    cy.get('[data-cy="post"]')
+      .should('contain.text',"There is no content!");
+    });
+  });

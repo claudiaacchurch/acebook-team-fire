@@ -15,8 +15,8 @@ const PostsController = {
           image: post.image,
           likes: post.likes,
           user: {
-            id: user.id,
-            username: user.username,
+            id: user?.id,
+            username: user?.username,
             profilePic: user?.profilePic,
           },
         };
