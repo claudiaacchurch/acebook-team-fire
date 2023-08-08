@@ -10,6 +10,7 @@ const PostsController = {
         const user = await User.findById(post.user);
         console.log(post.user);
         return {
+          _id: post._id,
           message: post.message,
           image: post.image,
           likes: post.likes,

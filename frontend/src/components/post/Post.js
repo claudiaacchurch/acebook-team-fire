@@ -21,9 +21,9 @@ const Post = ({ post }) => {
                 alt="Bradley Holmes"
                 src={post.user?.profilePic || "none"}
               />
-              <Typography variant="h5">{post.user.username}</Typography>
+              <Typography variant="h5">{post.user?.username}</Typography>
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography data-cy= "post" variant="body2" color="text.secondary">
               {post.message}
             </Typography>
             <CardMedia
@@ -46,13 +46,10 @@ const Post = ({ post }) => {
         <CardActionArea>
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
-              Bradley Holmes
+              {post.user?.username}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat
+            <Typography data-cy= "post" variant="body2" color="text.secondary">
+              {post.message}
             </Typography>
           </CardContent>
         </CardActionArea>

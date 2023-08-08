@@ -13,9 +13,15 @@ import {
 const CreatePost = ({ setPosts, token, setToken }) => {
   const [message, updateMessage] = useState();
   const [image, updateImage] = useState();
+  const [error, setError] = useState(null) ;
 
   const submitPost = (e) => {
     e.preventDefault();
+
+    if(!message && !image){
+      setError("There is no content")
+
+    }else{
 
     fetch("/posts", {
       method: "POST",
@@ -42,7 +48,8 @@ const CreatePost = ({ setPosts, token, setToken }) => {
           setToken(window.localStorage.getItem("token"));
         });
       }
-    });
+    
+    })};
   };
   return (
     <Grid>
@@ -94,6 +101,8 @@ const CreatePost = ({ setPosts, token, setToken }) => {
               </Grid>
             </Grid>
           </form>
+              {/* Error message */}
+              {error && <Typography color="error">{error}</Typography>}
         </CardContent>
       </Card>
     </Grid>
@@ -115,14 +124,15 @@ const Feed = ({ navigate }) => {
         .then(async (data) => {
           window.localStorage.setItem("token", data.token);
           setToken(window.localStorage.getItem("token"));
-          const postData = data.posts.reverse();
+          const postData = data.posts?data.posts.reverse():[];
+           //only reverse if it is defined
           console.log(postData);
           setPosts(postData);
         });
     } else {
       navigate("/login");
     }
-  }, []);
+  }, [navigate , token ]);
 
   if (token) {
     return (
@@ -157,4 +167,4 @@ const Feed = ({ navigate }) => {
   }
 };
 
-export default Feed;
+export { Feed, CreatePost };
