@@ -118,15 +118,13 @@ describe("/users", () => {
     test("response data is correct", async () => {
       const response = await request(app)
         .get("/users/@me")
-        .set("Authorization", `Bearer ${token}`);
+        .set("Authorization", `Bearer ${token}`)
+        .send({token:token});
 
       expect(response.statusCode).toBe(200);
-      console.log(response)
-      expect(response.data).toEqual({
-        username: "myusername",
-        email: "testaccount@test.com",
-        profilePic: "mypic.jpg",
-      });
+      expect(response.body.username).toEqual("mysupercoolusername");
+      expect(response.body.email).toEqual("testaccount@test.com");
+      expect(response.body.profilePic).toEqual("mypic.jpg");
     });
   });
 

@@ -36,18 +36,15 @@ const UsersController = {
     const { user_id } = TokenGenerator.verify(token);
 
     User.findById(user_id, (err, user) => {
-      if (err) res.status(500).end();
-
-      const { email, username, profilePic } = user;
-
-      console.log(user);
-      console.log(email, username, profilePic);
-
-      res.status(200).json({
-        email,
-        username,
-        profilePic,
-      });
+      if (err) {
+        throw err;
+      } else {
+        const { _id, email, username, profilePic } = user;
+        const token = TokenGenerator.jsonwebtoken(req.user_id);
+        res.status(200).json({userId : _id, email: email, username: username, profilePic: profilePic, token : token});
+      }
+      //const { email, username, profilePic } = user;
+      
     });
   },
 };
