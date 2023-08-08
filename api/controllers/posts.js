@@ -37,7 +37,6 @@ UpdateById: (req, res) => {
   const token = req.headers.authorization.replace("Bearer ", "");
   const { user_id: authorId } = TokenGenerator.verify(token);
   const postId = req.params.id; 
-  console.log(req)
   if (req.body.hasOwnProperty('comments')) {
     const comment = {
       text: req.body.comments.text,
@@ -53,7 +52,7 @@ UpdateById: (req, res) => {
     });
   } else if (req.body.hasOwnProperty('likes')) {
     
-    Post.updateOne({ _id: postId }, { likes: req.body.likes }, (err) => {
+    Post.updateOne({ _id: postId }, { likes: req.body.likes + 1}, (err) => {
       if (err) {
         throw err;
       }

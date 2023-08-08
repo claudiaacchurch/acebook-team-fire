@@ -28,7 +28,7 @@ const Feed = ({ navigate }) => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ likes: post.likes}),
+      body: JSON.stringify({ likes: post.likes})
     });
 
     if (response.status === 200 || response.status === 201 || response.status === 204) {
@@ -37,7 +37,7 @@ const Feed = ({ navigate }) => {
 
       const updatedPosts = posts.map(p => {
         if (p._id === post._id) {
-          return { ...p, likes: p.likes + 1 }; 
+          return { ...p, likes: p.likes + 1}; 
         }
         return p;
       });
@@ -46,6 +46,7 @@ const Feed = ({ navigate }) => {
 
       window.localStorage.setItem("token", data.token);
       setToken(window.localStorage.getItem("token"));
+      navigate('/posts')
 
     } else {
       console.log(response.status);
