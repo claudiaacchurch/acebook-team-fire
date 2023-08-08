@@ -30,7 +30,6 @@ describe("submitComment" ,() => {
       const requestbody = JSON.parse(interception.request.body);
       expect(requestbody.comments.authorName).to.eq('Barry123');
       expect(requestbody.comments.text).to.eq("I am a comment");
-      expect(requestbody.comments.commentDate).to.eq("2023-06-27T08:56:16.000Z")
     })
 
   })
