@@ -51,7 +51,6 @@ UpdateById: (req, res) => {
       res.status(201).json({ message: 'OK', token: token });
     });
   } else if (req.body.hasOwnProperty('likes')) {
-    
     Post.updateOne({ _id: postId }, { likes: req.body.likes + 1}, (err) => {
       if (err) {
         throw err;

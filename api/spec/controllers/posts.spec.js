@@ -242,9 +242,10 @@ describe("/posts", () => {
       let response = await request(app)
       .patch(`/posts/${posts[posts.length -1]._id}`)
         .set("Authorization", `Bearer ${token}`)
-        .send({likes: 10 ,token: token});
-      posts = await Post.find();
-      expect(posts[0].likes).toEqual(10);
+        .send({likes: posts[posts.length - 1].likes, token: token});
+      let newPosts = await Post.find();
+      console.log("POSTS", newPosts[newPosts.length -1])
+      expect(newPosts[newPosts.length -1].likes).toEqual(posts[posts.length -1].likes + 1);
     })
   })
 
