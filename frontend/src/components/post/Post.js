@@ -5,7 +5,7 @@ const Post = ({post}) => {
   const [token, setToken] = useState(window.localStorage.getItem("token"));
 
   const submitComment = async (commentText) => {
-    let response = await fetch('/@ME', {headers: {'Authorization': `Bearer ${token}`}});
+    let response = await fetch('/@me', {headers: {'Authorization': `Bearer ${token}`}});
     let data = await response.json();
     window.localStorage.setItem("token", data.token);
     setToken(window.localStorage.getItem("token"));
