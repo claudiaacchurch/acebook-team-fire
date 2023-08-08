@@ -8,14 +8,14 @@ const PostsController = {
     const postWithUserDetails = await Promise.all(
       posts.map(async (post) => {
         const user = await User.findById(post.user);
-        console.log(post.user);
+        console.log(user);
         return {
           _id: post._id,
           message: post.message,
           image: post.image,
           likes: post.likes,
           user: {
-            id: user?.id,
+            id: user?._id,
             username: user?.username,
             profilePic: user?.profilePic,
           },
