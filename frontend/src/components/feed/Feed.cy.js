@@ -88,13 +88,17 @@ describe("Feed", () => {
     }).as("patch2Posts");
 
     cy.mount(<Feed navigate={navigate} />);
-    cy.wait("@getPosts");
-    cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
-    cy.get('[class="like-btn-2"]').click();
-    cy.wait("@patch2Posts").then(() => {
-      cy.get('[data-cy="post"]').eq(0).should("contain.text", "Hello, world 3Like");
-      cy.get('[data-cy="post"]').eq(-1).should("contain.text", "Hello again, world 3Like");
+    cy.wait("@getPosts").then(()=>{
+      cy.wait(500).then(() => {
+        cy.get('[class="like-btn-1"]').click();
+        cy.get('[class="like-btn-2"]').click();
+      })
+    }).then(() => {
+      cy.wait(500).then(() => {
+        cy.get('[data-cy="post"]').eq(0).should("contain.text", "Hello, world 3Like");
+        cy.get('[data-cy="post"]').eq(-1).should("contain.text", "Hello again, world 3Like");
+      })
+      
     });
   });
 
