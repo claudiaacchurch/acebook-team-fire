@@ -93,9 +93,7 @@ describe("Feed", () => {
     cy.get('[class="like-btn-2"]').click();
     cy.wait("@patch2Posts");
 
-    cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello, world 3Like")
-      .and("contain.text", "Hello again, world 3Like");
+    cy.get('[data-cy="post"]').should("contain.text", "Hello, world 3Like").and("contain.text", "Hello again, world 3Like");
 
   });
 
@@ -129,8 +127,6 @@ describe("Feed", () => {
     cy.get('[class="like-btn-1"]').click();
     cy.wait("@patchPosts");
 
-    cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello, world 5Like")
-      .and("contain.text", "Hello again, world 2Like");
+    cy.get('[data-cy="post"]').should("contain.text", "Hello, world 5Like").and("contain.text", "Hello again, world 2Like");
   });
 });
