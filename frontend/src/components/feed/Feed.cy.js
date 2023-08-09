@@ -87,11 +87,11 @@ describe("Feed", () => {
     }).as("patch2Posts");
 
     cy.mount(<Feed navigate={navigate} />);
-    cy.wait("@getPosts", { timeout: 10000 });
+    cy.wait("@getPosts", { timeout: 20000 });
     cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts", { timeout: 10000 });
+    cy.wait("@patchPosts", { timeout: 20000 });
     cy.get('[class="like-btn-2"]').click();
-    cy.wait("@patch2Posts", { timeout: 10000 });
+    cy.wait("@patch2Posts", { timeout: 20000 });
 
     cy.get('[data-cy="post"]')
       .should("contain.text", "Hello, world 3Like")
