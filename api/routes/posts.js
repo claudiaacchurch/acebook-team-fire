@@ -5,5 +5,5 @@ const PostsController = require("../controllers/posts");
 
 router.get("/", PostsController.Index);
 router.post("/", PostsController.Create);
-router.patch("/", PostsController.UpdateById)
+router.patch("/:id", PostsController.UpdateById)
 module.exports = router;

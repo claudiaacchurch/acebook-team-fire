@@ -1,6 +1,8 @@
 class Comment {
-    constructor(text){
+    constructor(text, authorId, dateTime){
         this.text = text;
+        this.authorId = authorId;
+        this.dateTime = dateTime;
     }
 }
 

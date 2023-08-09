@@ -16,6 +16,11 @@ describe("Post model", () => {
     userId = user._id;
   });
 
+  afterEach( async () => {
+    //await User.deleteMany({});
+    await Post.deleteMany({});
+   })
+
   it("has a user", () => {
     var post = new Post({ message: "some message", user: userId });
     expect(post.user.toString()).toEqual(userId.toString());
@@ -66,12 +71,12 @@ describe("Post model", () => {
   });
   test("updates by ID for comments", async () => {
     let post1 = new Post({message: "howdy!", image: "picture.png", user: "64cb7d79486b9f0fc3404ed2"});
-    comment = {text: "test"};
+    const comment = {text: "test"};
     await post1.save();
-    posts = await Post.find();
-    await Post.updateOne({ _id: posts[0]._id }, { $push: { comments: comment } });
-    posts = await Post.find();
-    expect(posts[0].comments[0]).toEqual(comment);
+    const postId = post1._id;
+    await Post.updateOne({ _id: postId }, { $push: { comments: comment } });
+    const myPost = await Post.findById(postId);
+    expect(myPost.comments[0].text).toEqual("test");
   })
 
   test("updates by ID for likes", async () => {

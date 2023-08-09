@@ -109,6 +109,7 @@ const CreatePost = ({ setPosts, token, setToken }) => {
   );
 };
 
+
 const Feed = ({ navigate }) => {
   const [posts, setPosts] = useState([]);
   const [token, setToken] = useState(window.localStorage.getItem("token"));
@@ -133,12 +134,52 @@ const Feed = ({ navigate }) => {
       navigate("/login");
     }
   }, [navigate , token ]);
+  
+  const updateLikes = async (post) => {
+    let response = await fetch(`/posts/${post._id}`, {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ likes: post.likes})
+    });
+
+    if (response.status === 200 || response.status === 201 || response.status === 204) {
+      let data = await response.json();
+
+
+      const updatedPosts = posts.map(p => {
+        if (p._id === post._id) {
+          return { ...p, likes: p.likes + 1}; 
+        }
+        return p;
+      });
+
+      setPosts(updatedPosts); 
+
+      window.localStorage.setItem("token", data.token);
+      setToken(window.localStorage.getItem("token"));
+      navigate('/posts')
+
+    } else {
+      console.log(response.status);
+      throw new Error("Like not added");
+    }
+  };
+
+  const logout = () => {
+    window.localStorage.removeItem("token");
+    navigate("/login");
+  };
+
 
   if (token) {
     return (
       <>
         <Navbar navigate={navigate} />
         <div id="feed" role="feed">
+          <button onClick={logout}>Logout</button>
           <h3>Welcome back! here's what you missed</h3>
           <CreatePost
             setPosts={setPosts}
@@ -155,7 +196,7 @@ const Feed = ({ navigate }) => {
           >
             <Grid item xs={3}>
               {posts.map((post) => (
-                <Post post={post} key={post._id} />
+                <Post post={post} key={post._id} updateLikes={updateLikes}  />
               ))}
             </Grid>
           </Grid>
