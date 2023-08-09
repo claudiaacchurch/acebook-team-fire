@@ -41,9 +41,5 @@ describe("submitComment" ,() => {
       expect(interception.request.body.comments.authorName).to.eq('Barry123');
       expect(interception.request.body.comments.text).to.eq("I am a comment");
     })
+  })
 })
-
-
-
-  
-

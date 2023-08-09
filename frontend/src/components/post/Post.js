@@ -20,8 +20,9 @@ const Post = ({post, updateLikes}) => {
 
   return(
     <div>
-      <article data-cy="post" key={ post._id }>{ post.message } { post.likes }</article>
-      <button class={"like-btn-"+ post._id} onClick={() => updateLikes(post)}>Like</button>
+      <article data-cy="post" key={ post._id }>{ post.message } { post.likes }
+        <button class={"like-btn-"+ post._id} onClick={() => updateLikes(post)}>Like</button>
+      </article>
       <CommentForm submitComment = {submitComment}/>
     </div>
  )
