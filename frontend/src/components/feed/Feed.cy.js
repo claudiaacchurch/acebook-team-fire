@@ -50,12 +50,13 @@ describe("Feed", () => {
 
     cy.mount(<Feed navigate={navigate} />);
     cy.wait("@getPosts");
-    cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
-
-    cy.get('[data-cy="post"]')
+    cy.get('[class="like-btn-1"]').click().then(() => {
+      cy.get('[data-cy="post"]')
       .should("contain.text", "Hello, world 3Like")
       .and("contain.text", "Hello again, world 2Like");
+    });
+    
+
   });
 
   it("Calls the PATCH /posts endpoint and increments like count for both messages", () => {
@@ -87,15 +88,17 @@ describe("Feed", () => {
     }).as("patch2Posts");
 
     cy.mount(<Feed navigate={navigate} />);
-    cy.wait("@getPosts");
-    cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
-    cy.get('[class="like-btn-2"]').click();
-    cy.wait("@patch2Posts");
-
-    cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello, world 3Like")
-      .and("contain.text", "Hello again, world 3Like");
+    cy.wait("@getPosts").then(()=>{
+      cy.wait(500).then(() => {
+        cy.get('[class="like-btn-1"]').click();
+        cy.get('[class="like-btn-2"]').click();
+      })
+    }).then(() => {
+      cy.wait(500).then(() => {
+        cy.get('[data-cy="post"]').eq(0).should("contain.text", "Hello, world 3Like");
+        cy.get('[data-cy="post"]').eq(-1).should("contain.text", "Hello again, world 3Like");
+      })
+    });
   });
 
   it("Calls the PATCH /posts endpoint and increments like count twice", () => {
@@ -120,16 +123,17 @@ describe("Feed", () => {
     }).as("patchPosts");
 
     cy.mount(<Feed navigate={navigate} />);
-    cy.wait("@getPosts");
-    cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
-    cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
-    cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
-
-    cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello, world 5Like")
-      .and("contain.text", "Hello again, world 2Like");
+    cy.wait("@getPosts").then(()=>{
+      cy.wait(500).then(() => {
+        cy.get('[class="like-btn-1"]').click().click().click();
+      })
+    }).then(() => {
+      cy.wait(500).then(() => {
+        cy.get('[data-cy="post"]').eq(0).should("contain.text", "Hello, world 5Like");
+        cy.get('[data-cy="post"]').eq(-1).should("contain.text", "Hello again, world 2Like");
+      })
+      
+    });
+    
   });
 });

@@ -43,8 +43,6 @@ const UsersController = {
         const token = TokenGenerator.jsonwebtoken(req.user_id);
         res.status(200).json({userId : _id, email: email, username: username, profilePic: profilePic, token : token});
       }
-      //const { email, username, profilePic } = user;
-      
     });
   },
 };
