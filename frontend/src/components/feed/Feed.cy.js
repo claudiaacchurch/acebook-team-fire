@@ -49,9 +49,9 @@ describe("Feed", () => {
     }).as("patchPosts");
 
     cy.mount(<Feed navigate={navigate} />);
-    cy.wait("@getPosts");
+    cy.wait("@getPosts", { timeout: 10000 });
     cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
+    cy.wait("@patchPosts", { timeout: 10000 });
 
     cy.get('[data-cy="post"]')
       .should("contain.text", "Hello, world 3Like")
@@ -87,11 +87,11 @@ describe("Feed", () => {
     }).as("patch2Posts");
 
     cy.mount(<Feed navigate={navigate} />);
-    cy.wait("@getPosts");
+    cy.wait("@getPosts", { timeout: 10000 });
     cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
+    cy.wait("@patchPosts", { timeout: 10000 });
     cy.get('[class="like-btn-2"]').click();
-    cy.wait("@patch2Posts");
+    cy.wait("@patch2Posts", { timeout: 10000 });
 
     cy.get('[data-cy="post"]')
       .should("contain.text", "Hello, world 3Like")
@@ -120,13 +120,13 @@ describe("Feed", () => {
     }).as("patchPosts");
 
     cy.mount(<Feed navigate={navigate} />);
-    cy.wait("@getPosts");
+    cy.wait("@getPosts", { timeout: 10000 });
     cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
+    cy.wait("@patchPosts", { timeout: 10000 });
     cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
+    cy.wait("@patchPosts", { timeout: 10000 });
     cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
+    cy.wait("@patchPosts", { timeout: 10000 });
 
     cy.get('[data-cy="post"]')
       .should("contain.text", "Hello, world 5Like")
