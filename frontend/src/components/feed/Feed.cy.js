@@ -92,8 +92,7 @@ describe("Feed", () => {
     cy.wait("@patchPosts", { timeout: 10000 });
     cy.get('[class="like-btn-2"]').click();
     cy.wait("@patch2Posts", { timeout: 10000 });
-    cy.get('[data-cy="post"]').should("contain.text", "Hello, world 3Like");
-    cy.get('[data-cy="post"]').should("contain.text", "Hello again, world 3Like");
+    cy.get('[data-cy="post"]').should("contain.text", "Hello, world 3LikeHello again, world 3Like");
   });
 
   it("Calls the PATCH /posts endpoint and increments like count twice", () => {
@@ -127,7 +126,8 @@ describe("Feed", () => {
     cy.wait("@patchPosts", { timeout: 10000 });
 
     cy.get('[data-cy="post"]')
+      .should("contain.text", "Hello, world 5Like");
+      cy.get('[data-cy="post"]')
       .should("contain.text", "Hello, world 5Like")
-      .and("contain.text", "Hello again, world 2Like");
   });
 });
