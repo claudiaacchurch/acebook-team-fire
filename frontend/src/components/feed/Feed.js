@@ -168,12 +168,6 @@ const Feed = ({ navigate }) => {
     }
   };
 
-  const logout = () => {
-    window.localStorage.removeItem("token");
-    navigate("/login");
-  };
-
-
   if (token) {
     return (
       <>

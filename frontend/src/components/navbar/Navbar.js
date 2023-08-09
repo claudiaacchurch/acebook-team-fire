@@ -9,12 +9,13 @@ import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import AddIcon from '@mui/icons-material/Add';
+import LogoutIcon from '@mui/icons-material/Logout';
+
+
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -80,10 +81,20 @@ export default function Navbar({ navigate }) {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleAddPostClick = () => {
+    navigate('/posts');
+  };
+
+  const handleProfileClick = () => {
+    navigate('/profile');
+  };
+
   const logout = () => {
     window.localStorage.removeItem("token");
     navigate("/login");
   };
+
+
 
   const menuId = "primary-search-account-menu";
   const renderMenu = (
@@ -102,8 +113,7 @@ export default function Navbar({ navigate }) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={logout}>Logout</MenuItem>
+      
     </Menu>
   );
 
@@ -124,27 +134,24 @@ export default function Navbar({ navigate }) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
+      <MenuItem onClick={handleAddPostClick}> 
+        <IconButton size="large" color="inherit">
+            <AddIcon/>
         </IconButton>
-        <p>Messages</p>
+        <p>Add Post</p>
       </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
+
+      
+      
+      <MenuItem onClick={logout}>
+        <IconButton size="large" color="inherit">
+            <LogoutIcon />
         </IconButton>
-        <p>Notifications</p>
+        <p>Logout</p>
+
+        
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
+      <MenuItem onClick={handleProfileClick} >
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -163,15 +170,7 @@ export default function Navbar({ navigate }) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
+          
           <Typography
             variant="h6"
             noWrap
@@ -193,20 +192,18 @@ export default function Navbar({ navigate }) {
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
-              aria-label="show 4 new mails"
               color="inherit"
             >
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
+              <Badge badgeContent={0} color="error">
+                <AddIcon/>
               </Badge>
             </IconButton>
             <IconButton
               size="large"
-              aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
+              <Badge badgeContent={0} color="error">
+                <LogoutIcon />
               </Badge>
             </IconButton>
             <IconButton
