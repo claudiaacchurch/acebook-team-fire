@@ -8,6 +8,7 @@ const PostsController = {
     const postWithUserDetails = await Promise.all(posts.map(async post => {
       const user = await User.findById(post.user);
       return { 
+        _id: post._id,
         message: post.message,
         image: post.image,
         likes: post.likes,
@@ -33,10 +34,11 @@ const PostsController = {
 },
 
 UpdateById: (req, res) => {
+  console.log('hit here');
   const token = req.headers.authorization.replace("Bearer ", "");
   const { user_id: authorId } = TokenGenerator.verify(token);
   const postId = req.params.id; 
-
+  console.log(req);
   if (req.body.hasOwnProperty('comments')) {
     const comment = {
       text: req.body.comments.text,
@@ -58,6 +60,10 @@ UpdateById: (req, res) => {
       const token = TokenGenerator.jsonwebtoken(req.user_id);
       res.status(201).json({ message: 'OK', token: token });
     });
+  } else {
+    if (err) {
+      throw err;
+    }
   }
 }
 };
