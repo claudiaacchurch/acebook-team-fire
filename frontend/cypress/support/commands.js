@@ -16,6 +16,20 @@ Cypress.Commands.add('signup', (email, password) => {
   cy.get("#password").type(password);
   cy.get("#submit").click();
 })
+
+Cypress.Commands.add('login', (email, password) => {
+  cy.visit("/login");
+  cy.get("#email").type(email);
+  cy.get("#password").type(password);
+  cy.get("#submit").click();
+})
+
+Cypress.Commands.add('makePost', (message, image) => {
+  cy.visit("/posts");
+  cy.get("#message").type(message);
+  cy.get("#image").type(image);
+  cy.get("#submit").click();
+})
 //
 //
 // -- This is a child command --
