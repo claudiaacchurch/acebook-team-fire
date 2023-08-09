@@ -51,11 +51,12 @@ describe("Feed", () => {
     cy.mount(<Feed navigate={navigate} />);
     cy.wait("@getPosts");
     cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
-
-    cy.get('[data-cy="post"]')
+    cy.wait("@patchPosts").then(() => {
+      cy.get('[data-cy="post"]')
       .should("contain.text", "Hello, world 3Like")
       .and("contain.text", "Hello again, world 2Like");
+    });
+
   });
 
   it("Calls the PATCH /posts endpoint and increments like count for both messages", () => {
@@ -93,8 +94,8 @@ describe("Feed", () => {
     cy.get('[class="like-btn-2"]').click();
     cy.wait("@patch2Posts");
 
-    cy.get('[data-cy="post"]').should("contain.text", "Hello, world 3Like").and("contain.text", "Hello again, world 3Like");
-
+    cy.get('[data-cy="post"]').eq(0).should("contain.text", "Hello, world 3Like");
+    cy.get('[data-cy="post"]').eq(-1).should("contain.text", "Hello again, world 3Like");
   });
 
   it("Calls the PATCH /posts endpoint and increments like count twice", () => {
