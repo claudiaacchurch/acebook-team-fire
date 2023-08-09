@@ -244,7 +244,6 @@ describe("/posts", () => {
         .set("Authorization", `Bearer ${token}`)
         .send({likes: posts[posts.length - 1].likes, token: token});
       let newPosts = await Post.find();
-      console.log("POSTS", newPosts[newPosts.length -1])
       expect(newPosts[newPosts.length -1].likes).toEqual(posts[posts.length -1].likes + 1);
     })
   })
@@ -263,6 +262,40 @@ describe("/posts", () => {
       expect(posts[0].likes).toEqual(0);
       expect(response.status).toEqual(401);
     })
+  })
+
+  describe("Delete post by id", () => {
+    test("delete's post for the given id ", async () => {
+      await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "new world", image: "picture.jpg", token: token });
+      let posts = await Post.find();
+      let response = await request(app)
+      .delete(`/posts/${posts[posts.length -1]._id}`)
+        .set("Authorization", `Bearer ${token}`)
+      let newPosts = await Post.find();
+      expect(newPosts.length).toEqual(0);
+    })
+    
+    test("delete's post for the given id and the other remains", async () => {
+      await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "new world", image: "picture.jpg", token: token });
+      await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "test 2", image: "picture.jpg", token: token });
+      let posts = await Post.find();
+      let response = await request(app)
+      .delete(`/posts/${posts[posts.length -1]._id}`)
+        .set("Authorization", `Bearer ${token}`)
+      let newPosts = await Post.find();
+      console.log("POSTS", newPosts)
+      expect(newPosts[newPosts.length -1].message).toEqual("new world");
+    })
+
   })
 });
 

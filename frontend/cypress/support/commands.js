@@ -30,7 +30,30 @@ Cypress.Commands.add('makePost', (message, image) => {
   cy.get("#image").type(image);
   cy.get("#submit").click();
 })
-//
+
+Cypress.Commands.add('deleteAllPosts', () => {
+  cy.window().then((win) => {
+    const token = win.localStorage.getItem('token');
+
+  cy.request({
+    method: 'GET',
+    url: '/posts', 
+    headers: {
+        'Authorization': `Bearer ${token}` 
+    }
+}).then((response) => { 
+  const allPosts = response.body.posts;
+    const allPostIds = allPosts.map(post => post._id);
+    allPostIds.forEach(postId => {
+      cy.request({
+        method: 'DELETE',
+        url: `/posts/${postId}`, 
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+    });
+})})});
 //
 // -- This is a child command --
 // Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
