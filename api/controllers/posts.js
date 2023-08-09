@@ -52,12 +52,12 @@ UpdateById: (req, res) => {
       res.status(201).json({ message: 'OK', token: token });
     });
   } else if (req.body.hasOwnProperty('likes')) {
-    Post.updateOne({ _id: postId }, { likes: req.body.likes }, (err) => {
+    Post.updateOne({ _id: postId }, { likes: req.body.likes + 1}, (err) => {
       if (err) {
         throw err;
       }
       const token = TokenGenerator.jsonwebtoken(req.user_id);
-      res.status(201).json({ message: 'OK', token: token });
+      res.status(201).json({ message: 'OK', token: token});
     });
   } else {
     if (err) {
