@@ -84,12 +84,12 @@ describe("/users", () => {
       expect(users.length).toEqual(0);
     });
 
-    test("does create a user when username is missing", async () => {
+    test("does not create a user when username is missing", async () => {
       await request(app)
         .post("/users")
         .send({ email: "skye@email.com", password: "hello" });
       let users = await User.find();
-      expect(users.length).toEqual(1);
+      expect(users.length).toEqual(0);
     });
   });
 
