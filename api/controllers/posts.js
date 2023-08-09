@@ -64,7 +64,19 @@ UpdateById: (req, res) => {
       throw err;
     }
   }
-}
+},
+DeleteById: (req, res) => {
+  const token = req.headers.authorization.replace("Bearer ", "");
+  const { user_id: userId } = TokenGenerator.verify(token);
+  const postId = req.params.id;
+    Post.deleteOne({ _id: postId }, (err) => {
+      if (err) {
+        throw err;
+      }
+      const token = TokenGenerator.jsonwebtoken(req.user_id);
+      res.status(201).json({ message: "OK", token: token });
+    });
+  }
 };
 
 
