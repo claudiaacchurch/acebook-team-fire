@@ -14,7 +14,7 @@ describe("Post", () => {
 
 describe("submitComment" ,() => {
   it('fetches patch /posts with correct, datetime, authorid, message and postID', () => {
-    cy.intercept('GET', '/@me', {
+    cy.intercept('GET', 'users/@me', {
       statusCode: 200,
       body: {username: "Barry123"}
     });
