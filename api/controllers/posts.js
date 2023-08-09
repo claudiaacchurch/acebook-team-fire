@@ -12,6 +12,7 @@ const PostsController = {
         message: post.message,
         image: post.image,
         likes: post.likes,
+        comments: post.comments,
         user: {id: user.id, username: user.username, profilePic: user.profilePic} };
     }));
     const token = TokenGenerator.jsonwebtoken(req.user_id);
@@ -34,11 +35,9 @@ const PostsController = {
 },
 
 UpdateById: (req, res) => {
-  console.log('hit here');
   const token = req.headers.authorization.replace("Bearer ", "");
   const { user_id: authorId } = TokenGenerator.verify(token);
   const postId = req.params.id; 
-  console.log(req);
   if (req.body.hasOwnProperty('comments')) {
     const comment = {
       text: req.body.comments.text,

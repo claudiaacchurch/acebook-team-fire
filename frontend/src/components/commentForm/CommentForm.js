@@ -10,6 +10,7 @@ const CommentForm = ({submitComment}) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     submitComment(comment);
+    setComment('');
   };  
 
   return(
