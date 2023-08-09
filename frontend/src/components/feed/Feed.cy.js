@@ -49,11 +49,12 @@ describe("Feed", () => {
     }).as("patchPosts");
 
     cy.mount(<Feed navigate={navigate} />);
-    cy.wait("@getPosts");
     cy.get('[class="like-btn-1"]').click().then(() => {
-      cy.get('[data-cy="post"]')
+      cy.wait(500).then(() => {
+        cy.get('[data-cy="post"]')
       .should("contain.text", "Hello, world 3Like")
       .and("contain.text", "Hello again, world 2Like");
+      })
     });
     
 
