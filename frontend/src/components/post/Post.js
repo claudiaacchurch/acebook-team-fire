@@ -1,9 +1,10 @@
 import React from 'react';
+const Post = ({post, updateLikes}) => {
 
-const Post = ({post}) => {
   return(
-    <article data-cy="post" key={ post._id }>{ post.message }</article>
+    <article data-cy="post" key={ post._id }>{post.message} { post.likes }
+      <button class={"like-btn-"+ post._id} onClick={() => updateLikes(post)}>Like</button>
+    </article>
   )
 }
-
 export default Post;
