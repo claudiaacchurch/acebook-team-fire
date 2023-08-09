@@ -11,6 +11,7 @@ const PostsController = {
         message: post.message,
         image: post.image,
         likes: post.likes,
+        comments: post.comments,
         user: {id: user.id, username: user.username, profilePic: user.profilePic} };
     }));
     const token = TokenGenerator.jsonwebtoken(req.user_id);
