@@ -26,10 +26,11 @@ describe("Feed", () => {
 
     cy.wait("@getPosts").then(() => {
       cy.get('[data-cy="post"]')
-            .should("contain.text", "Hello, world 1Like")
-        .and("contain.text", "Hello again, world 2Like");
+        .should("contain.text", "Hello again, world2")
+        .and("contain.text", "Hello, world1");
     });
   });
+
   it("Calls the PATCH /posts endpoint and increments like count", () => {
     window.localStorage.setItem("token", "fakeToken");
     cy.intercept("GET", "/posts", (req) => {
@@ -57,8 +58,8 @@ describe("Feed", () => {
     cy.wait("@patchPosts");
 
     cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello, world 3Like")
-      .and("contain.text", "Hello again, world 2Like");
+      .should("contain.text", "Hello, world3")
+      .and("contain.text", "Hello again, world2");
   });
 
   it("Calls the PATCH /posts endpoint and increments like count for both messages", () => {
@@ -97,8 +98,8 @@ describe("Feed", () => {
     cy.wait("@patch2Posts");
 
     cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello, world 3Like")
-      .and("contain.text", "Hello again, world 3Like");
+    .should("contain.text", "Hello again, world3")
+    .and("contain.text", "Hello world3");
   });
 
   it("Calls the PATCH /posts endpoint and increments like count twice", () => {
@@ -132,8 +133,8 @@ describe("Feed", () => {
     cy.wait("@patchPosts");
 
     cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello, world 5Like")
-      .and("contain.text", "Hello again, world 2Like");
+      .should("contain.text", "Hello again, world2")
+      .and("contain.text", "Hello, world5");
   });
 });
 
@@ -178,4 +179,3 @@ describe("CreastePost with no content",() =>{
       .should('contain.text',"There is no content!");
     });
   });
-});
