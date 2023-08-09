@@ -96,6 +96,7 @@ describe("Feed", () => {
     cy.get('[data-cy="post"]')
       .should("contain.text", "Hello, world 3Like")
       .and("contain.text", "Hello again, world 3Like");
+
   });
 
   it("Calls the PATCH /posts endpoint and increments like count twice", () => {
