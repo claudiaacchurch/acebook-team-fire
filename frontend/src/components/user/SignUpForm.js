@@ -4,6 +4,8 @@ const SignUpForm = ({ navigate }) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [profilePic, setProfilePic] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -13,7 +15,7 @@ const SignUpForm = ({ navigate }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email: email, password: password })
+      body: JSON.stringify({ email: email, password: password, username: username, profilePic: profilePic})
     })
       .then(response => {
         if(response.status === 201) {
@@ -33,10 +35,21 @@ const SignUpForm = ({ navigate }) => {
   }
 
 
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value)
+  }
+
+  const handleProfilePicChange = (event) => {
+    setProfilePic(event.target.value)
+  }
+
+
     return (
       <form onSubmit={handleSubmit}>
           <input placeholder="Email" id="email" type='text' value={ email } onChange={handleEmailChange} />
           <input placeholder="Password" id="password" type='password' value={ password } onChange={handlePasswordChange} />
+          <input placeholder="Username" id="username" type='text' value={ username } onChange={handleUsernameChange} />
+          <input placeholder="profilePic" id="profilePic" type='text' value={ profilePic } onChange={handleProfilePicChange} />
           <input id='submit' type="submit" value="Submit" />
       </form>
     );
