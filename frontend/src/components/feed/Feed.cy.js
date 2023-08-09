@@ -26,8 +26,8 @@ describe("Feed", () => {
 
     cy.wait("@getPosts").then(() => {
       cy.get('[data-cy="post"]')
-        .should("contain.text", "Hello again, world2")
-        .and("contain.text", "Hello, world1");
+        .should("contain.text", "Hello again, worldLikes: 2")
+        .and("contain.text", "Hello, worldLikes: 1");
     });
   });
 
@@ -58,8 +58,8 @@ describe("Feed", () => {
     cy.wait("@patchPosts");
 
     cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello, world3")
-      .and("contain.text", "Hello again, world2");
+      .should("contain.text", "Hello, worldLikes: 3")
+      .and("contain.text", "Hello again, worldLikes: 2");
   });
 
   it("Calls the PATCH /posts endpoint and increments like count for both messages", () => {
@@ -98,8 +98,8 @@ describe("Feed", () => {
     cy.wait("@patch2Posts");
 
     cy.get('[data-cy="post"]')
-    .should("contain.text", "Hello again, world3")
-    .and("contain.text", "Hello world3");
+    .should("contain.text", "Hello again, worldLikes: 3")
+    .and("contain.text", "Hello, worldLikes: 3");
   });
 
   it("Calls the PATCH /posts endpoint and increments like count twice", () => {
@@ -133,8 +133,8 @@ describe("Feed", () => {
     cy.wait("@patchPosts");
 
     cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello again, world2")
-      .and("contain.text", "Hello, world5");
+      .should("contain.text", "Hello again, worldLikes: 2")
+      .and("contain.text", "Hello, worldLikes: 5");
   });
 });
 

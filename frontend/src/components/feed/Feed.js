@@ -179,7 +179,6 @@ const Feed = ({ navigate }) => {
       <>
         <Navbar navigate={navigate} />
         <div id="feed" role="feed">
-          <button onClick={logout}>Logout</button>
           <h3>Welcome back! here's what you missed</h3>
           <CreatePost
             setPosts={setPosts}

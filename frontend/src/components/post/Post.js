@@ -24,7 +24,10 @@ const Post = ({ post, updateLikes }) => {
               <Typography variant="h5">{post.user?.username}</Typography>
             </Typography>
             <Typography data-cy= "post" variant="body2" color="text.secondary">
-              {post.message}{ post.likes }
+              {post.message}
+            </Typography>
+            <Typography data-cy= "post" variant ="body2" color="text.secondary">
+              Likes: {post.likes}
             </Typography>
             <CardMedia
               style={{ marginTop: "2px" }}
@@ -33,7 +36,8 @@ const Post = ({ post, updateLikes }) => {
               image={post.image}
               alt=""
             />
-              <button class={"like-btn-"+ post._id} onClick={() => updateLikes(post)}>Like</button>
+              <button className={"like-btn-"+ post._id}
+              onClick={() => updateLikes(post)}>Like</button>
           </CardContent>
         </CardActionArea>
       </Card>
@@ -50,9 +54,13 @@ const Post = ({ post, updateLikes }) => {
               {post.user?.username}
             </Typography>
             <Typography data-cy= "post" variant="body2" color="text.secondary">
-              {post.message}{ post.likes }
+              {post.message}
             </Typography>
-          <button class={"like-btn-"+ post._id} onClick={() => updateLikes(post)}>Like</button>
+            <Typography data-cy= "post" variant ="body2" color="text.secondary">
+              Likes: {post.likes}
+            </Typography>
+          <button className={"like-btn-"+ post._id}
+              onClick={() => updateLikes(post)}>Like</button>
           </CardContent>
         </CardActionArea>
       </Card>
