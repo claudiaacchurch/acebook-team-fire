@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import CommentForm from '../commentForm/CommentForm';
+import Comment from '../comment/Comment';
 
 const Post = ({post, updateLikes}) => {
   const [token, setToken] = useState(window.localStorage.getItem("token"));
@@ -24,6 +25,11 @@ const Post = ({post, updateLikes}) => {
         <button id="like-button" class={"like-btn-"+ post._id} onClick={() => updateLikes(post)}>Like</button>
       </article>
       <CommentForm submitComment = {submitComment}/>
+      <p className="post-comments">
+        {post.comments.map((comment) => {
+          return <Comment comment={comment} />
+        })}
+      </p>
     </div>
  )
 }
