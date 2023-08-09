@@ -4,6 +4,7 @@ describe("adding likes", () => {
         cy.signup("user@email.com", "12345678")
         cy.login("user@email.com", "12345678")
         cy.makePost("Test message", "test image URL")
+        
     })
 
     it ("visit feed page", () => {
