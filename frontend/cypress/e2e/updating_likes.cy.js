@@ -1,9 +1,11 @@
 describe("adding likes", () => {
     before(() => {
-        cy.signup("user@email.com", "12345678")
-        cy.login("user@email.com", "12345678")
-        cy.deleteAllPosts()
-        cy.makePost("Test message", "test image URL")
+        cy.signup("user@email.com", "12345678").then(() => {
+            cy.login("user@email.com", "12345678");
+        })
+        cy.deleteAllPosts().then(() => {
+            cy.makePost("Test message", "test image URL");
+        });
     })
     it ("visit feed page", () => {
         cy.visit("/posts");

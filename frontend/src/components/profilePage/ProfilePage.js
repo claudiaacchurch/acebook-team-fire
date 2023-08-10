@@ -74,8 +74,12 @@ const ProfilePage = () => {
     return (
         
         <div>
-            <p>{user.profilePic}</p>
+          <article data-cy="user" key={ user.userId }>
+            <p>{user.userId}</p>
+           <p>{user.profilePic}</p>
             <p>Username: {user.username}</p>
+          </article>
+          
             <div>
             <h2>Your posts</h2>
             {posts?.map((post) => (

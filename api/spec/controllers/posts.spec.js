@@ -297,6 +297,19 @@ describe("/posts", () => {
       expect(newPosts[newPosts.length -1].message).toEqual("new world");
     })
   })
+
+  test("get post by user Id", async () => {
+    await request(app)
+      .post("/posts")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ message: "new world", image: "picture.jpg", token: token });
+      let posts = await Post.find();
+      let response = await request(app)
+      .get(`/posts/user/${posts[posts.length -1].user}`)
+        .set("Authorization", `Bearer ${token}`)
+      let newPosts = await Post.find();
+      expect(newPosts.length).toEqual(1);
+  })
 });
 
 //when user authenticated, post is created and associated with User
