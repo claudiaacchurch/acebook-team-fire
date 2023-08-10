@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Post from "../post/Post";
 import Grid from "@mui/material/Grid";
-import Navbar from "../navbar/Navbar";
 import {
   TextField,
   Button,
@@ -125,9 +124,7 @@ const Feed = ({ navigate }) => {
         .then(async (data) => {
           window.localStorage.setItem("token", data.token);
           setToken(window.localStorage.getItem("token"));
-          const postData = data.posts ? data.posts.reverse() : [];
-          //only reverse if it is defined
-          console.log(postData);
+          const postData = data.posts?data.posts.reverse():[];
           setPosts(postData);
         });
     } else {
@@ -161,7 +158,6 @@ const Feed = ({ navigate }) => {
       setToken(window.localStorage.getItem("token"));
       navigate("/posts");
     } else {
-      console.log(response.status);
       throw new Error("Like not added");
     }
   };
@@ -169,7 +165,6 @@ const Feed = ({ navigate }) => {
   if (token) {
     return (
       <>
-        <Navbar navigate={navigate} />
         <div id="feed" role="feed">
           <h3>Welcome back! here's what you missed</h3>
           <CreatePost setPosts={setPosts} token={token} setToken={setToken} />
