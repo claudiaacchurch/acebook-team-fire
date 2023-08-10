@@ -44,16 +44,43 @@ const ProfilePage = () => {
         } else {
             console.log(response.status);
         }};
+    
+        const updateLikes = async (post) => {
+            let response = await fetch(`/posts/${post._id}`, {
+              method: "PATCH",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ likes: post.likes})
+            });
+            if (response.status === 200 || response.status === 201 || response.status === 204) {
+              let data = await response.json();
+              const updatedPosts = posts.map(p => {
+                if (p._id === post._id) {
+                  return { ...p, likes: p.likes + 1};
+                }
+                return p;
+              });
+              setPosts(updatedPosts);
+              window.localStorage.setItem("token", data.token);
+              setToken(window.localStorage.getItem("token"));
+            } else {
+              console.log(response.status);
+              throw new Error("Like not added");
+            }
+          };
 
     return (
         
         <div>
-            <h2>Profile</h2>
+            <p>{user.profilePic}</p>
             <p>Username: {user.username}</p>
             <div>
-            <h2>User Posts</h2>
+            <h2>Your posts</h2>
             {posts?.map((post) => (
-                <Post post={post} key={post._id} />
+                <Post post={post} key={post._id}
+                updateLikes={() => updateLikes(post)}/>
             ))}
         </div>
 
