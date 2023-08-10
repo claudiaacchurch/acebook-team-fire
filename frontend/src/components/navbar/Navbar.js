@@ -9,9 +9,12 @@ import {
 } from "@mui/material";
 
 const Navbar = () => {
-const handleClick = () => {
-  window.localStorage.removeItem("token");
-}
+  const isAuthenticated = !!window.localStorage.getItem("token");
+
+  const handleClick = () => {
+    window.localStorage.removeItem("token");
+    window.location.reload(); 
+  }
 
   return (
     <AppBar position="static">
@@ -22,17 +25,26 @@ const handleClick = () => {
           Acebook Fire
         </Typography>
         <Button color="inherit" component={Link} to="/posts">
-          Posts
+          Feed
         </Button>
         <Button color="inherit" component={Link} to="/profile">
           Profile
         </Button>
-        <Button onClick={handleClick} color="inherit" component={Link} to="/login">
-          Logout
-        </Button>
+        
+        { isAuthenticated ? (
+          <Button onClick={handleClick} color="inherit" component={Link} to="/login">
+            Logout
+          </Button>
+        ) : (
+          <Button color="inherit" component={Link} to="/login">
+            Login
+          </Button>
+        )}
+
       </Toolbar>
     </AppBar>
   );
 };
 
 export default Navbar;
+

@@ -19,7 +19,7 @@ describe("/tokens", () => {
   });
 
   afterAll(async () => {
-    await User.deleteMany({})
+   await User.deleteMany({})
   })
 
   test("a token is returned when creds are valid", async () => {
