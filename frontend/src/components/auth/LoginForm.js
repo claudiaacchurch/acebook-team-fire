@@ -1,47 +1,112 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import {
+  Grid,
+  Paper,
+  Avatar,
+  Typography,
+  TextField,
+  Button,
+} from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
 const LogInForm = ({ navigate }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    let response = await fetch( '/tokens', {
-      method: 'post',
+    let response = await fetch("/tokens", {
+      method: "post",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email: email, password: password })
-    })
+      body: JSON.stringify({ email: email, password: password }),
+    });
 
-    if(response.status !== 201) {
-      console.log("yay")
-      navigate('/login')
+    if (response.status !== 201) {
+      navigate("/login");
     } else {
-      console.log("oop")
-      let data = await response.json()
-      window.localStorage.setItem("token", data.token)
-      navigate('/posts');
+      let data = await response.json();
+      window.localStorage.setItem("token", data.token);
+      navigate("/posts");
     }
-  }
+  };
+
+  const checkValues = () => {
+    if (!email || !password) setIsDisabled(true);
+    else setIsDisabled(false);
+  };
 
   const handleEmailChange = (event) => {
-    setEmail(event.target.value)
-  }
+    setEmail(event.target.value);
+    checkValues();
+  };
 
   const handlePasswordChange = (event) => {
-    setPassword(event.target.value)
-  }
+    setPassword(event.target.value);
+    checkValues();
+  };
 
-
-    return (
-      <form onSubmit={handleSubmit}>
-        <input placeholder='Email' id="email" type='text' value={ email } onChange={handleEmailChange} />
-        <input placeholder='Password' id="password" type='password' value={ password } onChange={handlePasswordChange} />
-        <input role='submit-button' id='submit' type="submit" value="Submit" />
-      </form>
-    );
-}
+  return (
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      style={{ minHeight: "100vh" }}
+    >
+      <Grid item xs={12} sm={8} md={6} lg={4}>
+        <Paper elevation={3} style={{ padding: 20 }}>
+          <Grid container spacing={2} justifyContent="center">
+            <Grid item>
+              <Avatar>
+                <LockOutlinedIcon />
+              </Avatar>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h5" align="center">
+                Log In
+              </Typography>
+            </Grid>
+          </Grid>
+          <form>
+            <TextField
+              onChange={handleEmailChange}
+              label="Email"
+              variant="outlined"
+              fullWidth
+              id="email"
+              margin="normal"
+              required
+            />
+            <TextField
+              onChange={handlePasswordChange}
+              label="Password"
+              type="password"
+              id="password"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              required
+            />
+            <Button
+              onClick={handleSubmit}
+              type="submit"
+              disabled={isDisabled}
+              variant="contained"
+              color="primary"
+              fullWidth
+              id="submit"
+              style={{ marginTop: 20 }}
+            >
+              Log In
+            </Button>
+          </form>
+        </Paper>
+      </Grid>
+    </Grid>
+  );
+};
 
 export default LogInForm;

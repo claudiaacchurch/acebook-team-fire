@@ -81,7 +81,31 @@ DeleteById: (req, res) => {
       const token = TokenGenerator.jsonwebtoken(req.user_id);
       res.status(201).json({ message: "OK", token: token });
     });
-  }
+  },
+
+  GetPostsByUserId: async (req, res) => {
+        const userId = req.params.userId;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        const posts = await Post.find({ user: userId });
+
+        const userPostWithDetails = posts.map(post => ({
+            _id: post._id,
+            message: post.message,
+            image: post.image,
+            likes: post.likes,
+            comments: post.comments,
+            user: { id: user.id, username: user.username, profilePic: user.profilePic }
+        }));
+
+        const token = TokenGenerator.jsonwebtoken(userId);
+
+        res.status(200).json({ posts: userPostWithDetails, token: token });
+
+    } 
 };
 
 module.exports = PostsController;
