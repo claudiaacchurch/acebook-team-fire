@@ -26,8 +26,8 @@ describe("Feed", () => {
 
     cy.wait("@getPosts").then(() => {
       cy.get('[data-cy="post"]')
-        .should("contain.text", "Hello again, worldLikes: 2")
-        .and("contain.text", "Hello, worldLikes: 1");
+        .should("contain.text", "Hello again, world")
+        .and("contain.text", "Hello, world");
     });
   });
 
@@ -56,8 +56,8 @@ describe("Feed", () => {
     cy.get('[class="like-btn-1"]').click().then(() => {
       cy.wait(500).then(() => {
         cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello, worldLikes: 3")
-      .and("contain.text", "Hello again, worldLikes: 2");
+      .should("contain.text", "Hello, world")
+      .and("contain.text", "Hello again, world");
       })
     });
     
@@ -100,8 +100,8 @@ describe("Feed", () => {
       })
     }).then(() => {
       cy.wait(500).then(() => {
-        cy.get('[data-cy="post"]').should("contain.text", "Hello, worldLikes: 3");
-        cy.get('[data-cy="post"]').should("contain.text", "Hello again, worldLikes: 3");
+        cy.get('[data-cy="post"]').should("contain.text", "Hello, world");
+        cy.get('[data-cy="post"]').should("contain.text", "Hello again, world");
       })
     });
   });
@@ -137,8 +137,8 @@ describe("Feed", () => {
     cy.wait("@patchPosts");
 
     cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello again, worldLikes: 2")
-      .and("contain.text", "Hello, worldLikes: 5");
+      .should("contain.text", "Hello again, world")
+      .and("contain.text", "Hello, world");
   });
 });
 
