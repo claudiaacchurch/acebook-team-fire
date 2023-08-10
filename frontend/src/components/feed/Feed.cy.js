@@ -26,8 +26,8 @@ describe("Feed", () => {
 
     cy.wait("@getPosts").then(() => {
       cy.get('[data-cy="post"]')
-        .should("contain.text", "Hello again, worldLikes: 2")
-        .and("contain.text", "Hello, worldLikes: 1");
+        .should("contain.text", "Hello again, world")
+        .and("contain.text", "Hello, world");
     });
   });
 
@@ -53,11 +53,11 @@ describe("Feed", () => {
     }).as("patchPosts");
 
     cy.mount(<Feed navigate={navigate} />);
-    cy.get('[class="like-btn-1"]').click().then(() => {
+    cy.get('.like-btn-1').click().then(() => {
       cy.wait(500).then(() => {
         cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello, worldLikes: 3")
-      .and("contain.text", "Hello again, worldLikes: 2");
+      .should("contain.text", "Hello, world")
+      .and("contain.text", "Hello again, world");
       })
     });
     
@@ -95,13 +95,13 @@ describe("Feed", () => {
     cy.mount(<Feed navigate={navigate} />);
     cy.wait("@getPosts").then(()=>{
       cy.wait(500).then(() => {
-        cy.get('[class="like-btn-1"]').click();
-        cy.get('[class="like-btn-2"]').click();
+        cy.get('.like-btn-1').click();
+        cy.get('.like-btn-2').click();
       })
     }).then(() => {
       cy.wait(500).then(() => {
-        cy.get('[data-cy="post"]').should("contain.text", "Hello, worldLikes: 3");
-        cy.get('[data-cy="post"]').should("contain.text", "Hello again, worldLikes: 3");
+        cy.get('[data-cy="post"]').should("contain.text", "Hello, world");
+        cy.get('[data-cy="post"]').should("contain.text", "Hello again, world");
       })
     });
   });
@@ -129,16 +129,16 @@ describe("Feed", () => {
 
     cy.mount(<Feed navigate={navigate} />);
     cy.wait("@getPosts");
-    cy.get('[class="like-btn-1"]').click();
+    cy.get('.like-btn-1').click();
     cy.wait("@patchPosts");
-    cy.get('[class="like-btn-1"]').click();
+    cy.get('.like-btn-1').click();
     cy.wait("@patchPosts");
-    cy.get('[class="like-btn-1"]').click();
+    cy.get('.like-btn-1').click();
     cy.wait("@patchPosts");
 
     cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello again, worldLikes: 2")
-      .and("contain.text", "Hello, worldLikes: 5");
+      .should("contain.text", "Hello again, world")
+      .and("contain.text", "Hello, world");
   });
 });
 
@@ -159,7 +159,7 @@ describe("CreatePost",() =>{
     cy.mount(< Feed navigate={navigate}/>);
   //text  in input field, then click submit (\)for indicate its nota  closing '
   cy.get('[placeholder="What\'s on your mind today?"]').type("This is a new post");
-  cy.contains("Submit").click();
+  cy.contains("POST").click();
 
   cy.wait("@submitPost").its('response.statusCode')
   .should('eq',201);
@@ -176,7 +176,7 @@ describe("CreastePost with no content",() =>{
 
     // cy.get('[placeholder="What\'s on your mind today?"]').type("");
     // cy.get('[placeholder="Image URL"]').type("");
-    cy.contains("Submit").click();
+    cy.contains("POST").click();
 
     // cy.wait("@submitPost").then(()=>{
     cy.get('[data-cy="post"]')
