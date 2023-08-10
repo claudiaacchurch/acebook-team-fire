@@ -82,7 +82,6 @@ const ProfilePage = () => {
   return (
     <div>
       <article data-cy="user" key={user.userId}>
-        <p>{user.userId}</p>
         <p>
           <img
             width="30"
