@@ -9,7 +9,8 @@ const PostSchema = new mongoose.Schema({
     {
       authorId: { type: String},
       text: { type: String},
-      commentDate: { type: Date }
+      commentDate: { type: Date },
+      username: {type: String}
     }
   ]
 });

@@ -9,10 +9,16 @@ const Comment = ({comment}) => {
             { comment.text } 
         </p>
         <p>
-            By: { comment.authorId } 
+            By: { comment.username } 
         </p>
         <p>
-            Date: { comment.commentDate }
+            Date: {  new Date(comment.commentDate)
+        .toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            timeZoneName: 'shortGeneric',
+            timeZone: 'GMT'
+        })}
         </p>
     </article>
   )

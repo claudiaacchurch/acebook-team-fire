@@ -25,11 +25,11 @@ const Post = ({post, updateLikes}) => {
         <button id="like-button" class={"like-btn-"+ post._id} onClick={() => updateLikes(post)}>Like</button>
       </article>
       <CommentForm submitComment = {submitComment}/>
-      <p className="post-comments">
+      <div className="post-comments">
         {post.comments.map((comment) => {
           return <Comment comment={comment} />
         })}
-      </p>
+      </div>
     </div>
  )
 }
