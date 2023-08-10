@@ -1,4 +1,8 @@
 import React from 'react';
+
+// const currentDate = new Date();
+// const formattedDate = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
+
 const Comment = ({comment}) => {
   return(
     <article 
@@ -12,13 +16,7 @@ const Comment = ({comment}) => {
             By: { comment.username } 
         </p>
         <p>
-            Date: {  new Date(comment.commentDate)
-        .toLocaleTimeString('en-US', {
-            hour: 'numeric',
-            minute: 'numeric',
-            timeZoneName: 'shortGeneric',
-            timeZone: 'GMT'
-        })}
+            Date: { comment.commentDate }
         </p>
     </article>
   )

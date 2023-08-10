@@ -12,8 +12,8 @@ describe("Feed", () => {
         statusCode: 200,
         body: {
           posts: [
-            { _id: 1, message: "Hello, world", likes: 1 },
-            { _id: 2, message: "Hello again, world", likes: 2 },
+            { _id: 1, message: "Hello, world", likes: 1, comments: [] },
+            { _id: 2, message: "Hello again, world", likes: 2, comments: [] },
           ],
         },
       });
@@ -34,8 +34,8 @@ describe("Feed", () => {
         statusCode: 200,
         body: {
           posts: [
-            { _id: 1, message: "Hello, world", likes: 2 },
-            { _id: 2, message: "Hello again, world", likes: 2 },
+            { _id: 1, message: "Hello, world", likes: 2, comments: [] },
+            { _id: 2, message: "Hello again, world", likes: 2, comments: [] },
           ],
         },
       });
@@ -67,8 +67,8 @@ describe("Feed", () => {
         statusCode: 200,
         body: {
           posts: [
-            { _id: 1, message: "Hello, world", likes: 2 },
-            { _id: 2, message: "Hello again, world", likes: 2 },
+            { _id: 1, message: "Hello, world", likes: 2, comments: [] },
+            { _id: 2, message: "Hello again, world", likes: 2, comments: [] },
           ],
         },
       });
@@ -109,8 +109,8 @@ describe("Feed", () => {
         statusCode: 200,
         body: {
           posts: [
-            { _id: 1, message: "Hello, world", likes: 2 },
-            { _id: 2, message: "Hello again, world", likes: 2 },
+            { _id: 1, message: "Hello, world", likes: 2, comments: [] },
+            { _id: 2, message: "Hello again, world", likes: 2, comments: [] },
           ],
         },
       });
