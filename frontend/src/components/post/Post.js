@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
@@ -9,10 +9,21 @@ import { CardActionArea } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import CommentForm from "../commentForm/CommentForm";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import Comment from "../comment/Comment"
+import Comment from "../comment/Comment";
 
 const Post = ({ post, updateLikes }) => {
   const [token, setToken] = useState(window.localStorage.getItem("token"));
+  
+  // This is a useless hook which is included for education purposes only
+  const [lastComment, setLastComment] = useState("");
+
+  // This is a useless useEffect which is included for education purposes only
+  useEffect(() => {
+    console.log("WOO WE ADDED A COMMENT");
+    console.log((lastComment))
+  }, [lastComment])
+  // whatever you put in the array above will trigger the useEffect when it is altered.
+
 
   const submitComment = async (commentText) => {
     let response = await fetch("/users/@me", {
@@ -27,6 +38,8 @@ const Post = ({ post, updateLikes }) => {
       authorName: data.username,
       commentDate: new Date(),
     };
+    // more educational content for hook usage.
+    setLastComment(comment);
     response = await fetch(`/posts/${post._id}`, {
       method: "PATCH",
       headers: {
@@ -99,8 +112,8 @@ const Post = ({ post, updateLikes }) => {
               <Grid item>
                 <CommentForm submitComment={submitComment} />
                   <div className="post-comments">
-                    {post.comments.map((comment) => {
-                    return <Comment comment={comment} />
+                    {post.comments.map((comment, index) => {
+                      return <Comment index={index} comment={comment} />
                     })}
                   </div>
               </Grid>

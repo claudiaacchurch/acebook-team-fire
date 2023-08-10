@@ -3,11 +3,11 @@ import React from 'react';
 // const currentDate = new Date();
 // const formattedDate = `${currentDate.getDate()}-${currentDate.getMonth() + 1}-${currentDate.getFullYear()}`;
 
-const Comment = ({comment}) => {
+const Comment = ({comment, index}) => {
   return(
     <article 
         data-cy="comment" 
-        key={ comment._id }
+        key={ index }
     >
         <p>
             { comment.text } 
