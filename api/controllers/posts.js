@@ -4,6 +4,7 @@ const TokenGenerator = require("../lib/token_generator");
 
 const PostsController = {
   Index: async (req, res) => {
+
     const posts = await Post.find()
     const postWithUserDetails = await Promise.all(posts.map(async post => {
       const user = await User.findById(post.user);
@@ -15,24 +16,26 @@ const PostsController = {
         comments: post.comments,
         user: {id: user.id, username: user.username, profilePic: user.profilePic} };
     }));
+
     const token = TokenGenerator.jsonwebtoken(req.user_id);
     res.status(200).json({ posts: postWithUserDetails, token: token });
   },
 
   Create: (req, res) => {
-  const token = req.headers.authorization.replace("Bearer ", "")
-  const {user_id: userId}= TokenGenerator.verify(token)
-  const postData = { ...req.body, user: userId };
-  const post = new Post(postData);
-  post.save((err) => {
-    if (err) {
-      throw err;
-    }
+    const token = req.headers.authorization.replace("Bearer ", "");
+    const { user_id: userId } = TokenGenerator.verify(token);
+    const postData = { ...req.body, user: userId };
+    const post = new Post(postData);
+    post.save((err) => {
+      if (err) {
+        throw err;
+      }
 
-    const token = TokenGenerator.jsonwebtoken(req.user_id)
-    res.status(201).json({ message: 'OK', token: token });
-  });
-},
+      const token = TokenGenerator.jsonwebtoken(req.user_id);
+      res.status(201).json({ message: "OK", token: token });
+    });
+  },
+
 
 UpdateById: async (req, res) => {
   const token = req.headers.authorization.replace("Bearer ", "");
@@ -80,6 +83,5 @@ DeleteById: (req, res) => {
     });
   }
 };
-
 
 module.exports = PostsController;

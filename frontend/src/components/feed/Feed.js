@@ -8,52 +8,58 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+
 const CreatePost = ({ setPosts, token, setToken }) => {
   const [message, updateMessage] = useState();
   const [image, updateImage] = useState();
+  const [error, setError] = useState(null);
+
   const submitPost = (e) => {
     e.preventDefault();
-    fetch("/posts", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        message,
-        image,
-      }),
-    }).then((res) => {
-      if (res.status === 201) {
-        setPosts((prev) => [
-          {
-            message,
-            image,
-          }, ...prev
-        ]);
-        res.json().then((data) => {
-          window.localStorage.setItem("token", data.token);
-          setToken(window.localStorage.getItem("token"));
-        });
-      }
-    });
+
+    if (!message && !image) {
+      setError("There is no content!");
+    } else {
+      fetch("/posts", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message,
+          image,
+        }),
+      }).then((res) => {
+        if (res.status === 201) {
+          setPosts((prev) => [
+            {
+              message,
+              image,
+              user: { username: "username", profilePic: "https://google.com" },
+            },
+            ...prev,
+          ]);
+
+          res.json().then((data) => {
+            window.localStorage.setItem("token", data.token);
+            setToken(window.localStorage.getItem("token"));
+          });
+        }
+      });
+    }
   };
+
   return (
     <Grid>
       <Card style={{ maxWidth: 400, padding: "", margin: "10px auto" }}>
         <CardContent>
-          {/* <Typography
-            variant="body2"
-            color="textSecondary"
-            component="p"
-            gutterBottom
-          >
-            What's on your mind?
-          </Typography> */}
           <form>
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <TextField id='message'
+                <TextField
+                  id="message"
                   onChange={(e) => updateMessage(e.target.value)}
                   multiline
                   rows={2}
@@ -64,7 +70,8 @@ const CreatePost = ({ setPosts, token, setToken }) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField id="image"
+                <TextField
+                  id="image"
                   onChange={(e) => {
                     updateImage(e.target.value);
                   }}
@@ -76,26 +83,36 @@ const CreatePost = ({ setPosts, token, setToken }) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button id="submit"
+                <Button
+                  id="submit"
                   onClick={submitPost}
                   type="submit"
                   variant="contained"
                   color="primary"
                   fullWidth
                 >
-                  Submit
+                  
+                  <b>POST</b>
                 </Button>
               </Grid>
             </Grid>
           </form>
+          {/* Error message */}
+          {error && (
+            <Typography color="error" data-cy="post">
+              {error}
+            </Typography>
+          )}
         </CardContent>
       </Card>
     </Grid>
   );
 };
+
 const Feed = ({ navigate }) => {
   const [posts, setPosts] = useState([]);
   const [token, setToken] = useState(window.localStorage.getItem("token"));
+
   useEffect(() => {
     if (token) {
       fetch("/posts", {
@@ -107,10 +124,14 @@ const Feed = ({ navigate }) => {
         .then(async (data) => {
           window.localStorage.setItem("token", data.token);
           setToken(window.localStorage.getItem("token"));
-          setPosts(data.posts);
+          const postData = data.posts?data.posts.reverse():[];
+          setPosts(postData);
         });
+    } else {
+      navigate("/login");
     }
-  }, [token]);
+  }, [navigate, token]);
+
   const updateLikes = async (post) => {
     let response = await fetch(`/posts/${post._id}`, {
       method: "PATCH",
@@ -118,43 +139,49 @@ const Feed = ({ navigate }) => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ likes: post.likes})
+      body: JSON.stringify({ likes: post.likes }),
     });
-    if (response.status === 200 || response.status === 201 || response.status === 204) {
+    if (
+      response.status === 200 ||
+      response.status === 201 ||
+      response.status === 204
+    ) {
       let data = await response.json();
-      const updatedPosts = posts.map(p => {
+      const updatedPosts = posts.map((p) => {
         if (p._id === post._id) {
-          return { ...p, likes: p.likes + 1};
+          return { ...p, likes: p.likes + 1 };
         }
         return p;
       });
       setPosts(updatedPosts);
       window.localStorage.setItem("token", data.token);
       setToken(window.localStorage.getItem("token"));
-      navigate('/posts')
+      navigate("/posts");
     } else {
-      console.log(response.status);
       throw new Error("Like not added");
     }
   };
-  const logout = () => {
-    window.localStorage.removeItem("token");
-    navigate("/login");
-  };
+
   if (token) {
     return (
       <>
-        <CreatePost
-            setPosts={setPosts}
-            token={token}
-            setToken={setToken}
-          />
-        <h2>Posts</h2>
-        <button onClick={logout}>Logout</button>
         <div id="feed" role="feed">
-          {posts.map((post) => (
-            <Post post={post} key={post._id} updateLikes={updateLikes} />
-          ))}
+          <h3>Welcome back! here's what you missed</h3>
+          <CreatePost setPosts={setPosts} token={token} setToken={setToken} />
+          <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justify="center"
+            style={{ minHeight: "100vh" }}
+          >
+            <Grid item xs={3}>
+              {posts.map((post) => (
+                <Post post={post} key={post._id} updateLikes={updateLikes} />
+              ))}
+            </Grid>
+          </Grid>
         </div>
       </>
     );
@@ -162,4 +189,5 @@ const Feed = ({ navigate }) => {
     navigate("/login");
   }
 };
-export default Feed;
+
+export { Feed, CreatePost };
