@@ -9,6 +9,7 @@ import { CardActionArea } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import CommentForm from "../commentForm/CommentForm";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import Comment from "../comment/Comment"
 
 const Post = ({ post, updateLikes }) => {
   const [token, setToken] = useState(window.localStorage.getItem("token"));
