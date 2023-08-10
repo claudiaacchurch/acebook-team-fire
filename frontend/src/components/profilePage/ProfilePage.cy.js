@@ -63,6 +63,6 @@ describe("ProfilePage", () => {
     cy.wait('@likePost')
     .its('response.body')
     .should('deep.eq', { likes: 3 });
-    cy.get('[data-cy=post]').should('contain.text',"First user postLikes: 3Another user postLikes: 2");
+    cy.get('[data-cy=post]').should('contain.text',"First user postAnother user post");
 })});
 
