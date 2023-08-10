@@ -11,7 +11,6 @@ const AuthenticationController = {
         console.log("auth error: user not found");
         res.status(401).json({ message: "auth error" });
       } else if (user.password !== password) {
-        console.log(`${password} ${user.password}`)
         console.log("auth error: passwords do not match");
         res.status(401).json({ message: "auth error" });
       } else {
