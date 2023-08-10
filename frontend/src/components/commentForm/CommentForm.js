@@ -1,4 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
+import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
+import Input from "@mui/material/Input"
 
 const CommentForm = ({submitComment}) => {
   const [comment, setComment] = useState('');
@@ -15,8 +17,8 @@ const CommentForm = ({submitComment}) => {
 
   return(
     <form onSubmit={handleSubmit}>
-      <input data-cy="comment-text" type = "text" value = {comment} onChange={handleChange} placeholder = "Add Comment"/>
-      <button type = "submit" data-cy="submit-comment">Add Comment </button>
+      <Input data-cy="comment-text" type = "text" value = {comment} onChange={handleChange} placeholder = "Add Comment"/>
+      <SendOutlinedIcon type = "submit" data-cy="submit-comment" />
     </form>
   );
 }

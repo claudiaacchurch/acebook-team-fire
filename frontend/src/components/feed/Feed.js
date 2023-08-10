@@ -9,6 +9,7 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
 
 const CreatePost = ({ setPosts, token, setToken }) => {
   const [message, updateMessage] = useState();
@@ -89,7 +90,7 @@ const CreatePost = ({ setPosts, token, setToken }) => {
                   color="primary"
                   fullWidth
                 >
-                  Submit
+                  <SendIcon />
                 </Button>
               </Grid>
             </Grid>
