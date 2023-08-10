@@ -19,6 +19,7 @@ const App = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
+      <Navbar navigate = {useNavigate} />
       <Routes>
         <Route path="/posts" element={<Feed navigate={useNavigate()} />} />
         <Route path="/login" element={<LoginForm navigate={useNavigate()} />} />
