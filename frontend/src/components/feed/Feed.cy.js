@@ -1,7 +1,10 @@
-import Feed from "./Feed";
-const navigate = () => {};
 
+import {Feed }from './Feed'
+import { CreatePost } from './Feed'
+
+const navigate = () => {}
 let token = window.localStorage.setItem("token", "fakeToken");
+
 
 describe("Feed", () => {
   it("Calls the /posts endpoint and lists all the posts", () => {
@@ -23,10 +26,11 @@ describe("Feed", () => {
 
     cy.wait("@getPosts").then(() => {
       cy.get('[data-cy="post"]')
-        .should("contain.text", "Hello, world 1Like")
-        .and("contain.text", "Hello again, world 2Like");
+        .should("contain.text", "Hello again, worldLikes: 2")
+        .and("contain.text", "Hello, worldLikes: 1");
     });
   });
+
   it("Calls the PATCH /posts endpoint and increments like count", () => {
     window.localStorage.setItem("token", "fakeToken");
     cy.intercept("GET", "/posts", (req) => {
@@ -52,8 +56,8 @@ describe("Feed", () => {
     cy.get('[class="like-btn-1"]').click().then(() => {
       cy.wait(500).then(() => {
         cy.get('[data-cy="post"]')
-      .should("contain.text", "Hello, world 3Like")
-      .and("contain.text", "Hello again, world 2Like");
+      .should("contain.text", "Hello, worldLikes: 3")
+      .and("contain.text", "Hello again, worldLikes: 2");
       })
     });
     
@@ -96,8 +100,8 @@ describe("Feed", () => {
       })
     }).then(() => {
       cy.wait(500).then(() => {
-        cy.get('[data-cy="post"]').eq(0).should("contain.text", "Hello, world 3Like");
-        cy.get('[data-cy="post"]').eq(-1).should("contain.text", "Hello again, world 3Like");
+        cy.get('[data-cy="post"]').should("contain.text", "Hello, worldLikes: 3");
+        cy.get('[data-cy="post"]').should("contain.text", "Hello again, worldLikes: 3");
       })
     });
   });
@@ -124,17 +128,58 @@ describe("Feed", () => {
     }).as("patchPosts");
 
     cy.mount(<Feed navigate={navigate} />);
-    cy.wait("@getPosts").then(()=>{
-      cy.wait(500).then(() => {
-        cy.get('[class="like-btn-1"]').click().click().click();
-      })
-    }).then(() => {
-      cy.wait(500).then(() => {
-        cy.get('[data-cy="post"]').eq(0).should("contain.text", "Hello, world 5Like");
-        cy.get('[data-cy="post"]').eq(-1).should("contain.text", "Hello again, world 2Like");
-      })
-      
-    });
-    
+    cy.wait("@getPosts");
+    cy.get('[class="like-btn-1"]').click();
+    cy.wait("@patchPosts");
+    cy.get('[class="like-btn-1"]').click();
+    cy.wait("@patchPosts");
+    cy.get('[class="like-btn-1"]').click();
+    cy.wait("@patchPosts");
+
+    cy.get('[data-cy="post"]')
+      .should("contain.text", "Hello again, worldLikes: 2")
+      .and("contain.text", "Hello, worldLikes: 5");
   });
 });
+
+
+describe("CreatePost",() =>{
+  it ("submits a new post in Text", ()=>{
+    //set fake token to simulate authentication
+    window.localStorage.setItem("token","fakeToken")
+    //mock the successful response
+    cy.intercept('POST', '/posts',(req) =>{
+        req.reply({
+          statusCode: 201, 
+          body:{ message: "OK" , token: "newFakeToken"},
+        });
+      }).as("submitPost");
+
+    //passing fake props to CreatePost
+    cy.mount(< Feed navigate={navigate}/>);
+  //text  in input field, then click submit (\)for indicate its nota  closing '
+  cy.get('[placeholder="What\'s on your mind today?"]').type("This is a new post");
+  cy.contains("Submit").click();
+
+  cy.wait("@submitPost").its('response.statusCode')
+  .should('eq',201);
+  cy.get('[data-cy="post"]')
+  .should('contain.text', "This is a new post");
+  })
+});
+
+describe("CreastePost with no content",() =>{
+  it("return msg There is no content!", ()=> {
+    window.localStorage.setItem("token","fakeToken")
+
+    cy.mount(< Feed navigate={navigate}/>);
+
+    // cy.get('[placeholder="What\'s on your mind today?"]').type("");
+    // cy.get('[placeholder="Image URL"]').type("");
+    cy.contains("Submit").click();
+
+    // cy.wait("@submitPost").then(()=>{
+    cy.get('[data-cy="post"]')
+      .should('contain.text',"There is no content!");
+    });
+  });

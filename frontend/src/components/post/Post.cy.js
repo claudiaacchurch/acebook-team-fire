@@ -13,7 +13,8 @@ describe("Post", () => {
   
   it('renders a post with a message and likes with have.text', () => {
     cy.mount(<Post post={{_id: 1, message: "Hello, world", likes:5}} />);
-    cy.get('[data-cy="post"]').should('have.text', "Hello, world 5Like")
+    cy.get('[data-cy="post"]')
+    .should('have.text', "Hello, worldLikes: 5")
   })
 
   it('checks Like button exists', () => {
