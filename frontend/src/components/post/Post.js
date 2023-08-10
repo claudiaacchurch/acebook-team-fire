@@ -19,8 +19,8 @@ const Post = ({ post, updateLikes }) => {
     response = await fetch(`/posts/${post._id}`, 
                           {method: 'PATCH', 
                           headers: {
+                            Authorization: `Bearer ${token}`}, 
                             'Content-type' : "application/json",
-                            'Authorization': `Bearer ${token}`}, 
                           body: JSON.stringify({'comments':comment})});
   }
 

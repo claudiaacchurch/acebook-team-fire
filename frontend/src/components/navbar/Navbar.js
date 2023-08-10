@@ -89,7 +89,8 @@ export default function Navbar({ navigate }) {
     navigate('/profile');
   };
 
-  const logout = () => {
+  const handleClick = () => {
+    console.log('pressed');
     window.localStorage.removeItem("token");
     navigate("/login");
   };
@@ -143,8 +144,8 @@ export default function Navbar({ navigate }) {
 
       
       
-      <MenuItem onClick={logout}>
-        <IconButton size="large" color="inherit">
+      <MenuItem>
+        <IconButton size="large" color="inherit" onClick={handleClick}>
             <LogoutIcon />
         </IconButton>
         <p>Logout</p>
