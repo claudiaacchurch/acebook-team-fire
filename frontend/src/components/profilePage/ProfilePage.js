@@ -76,7 +76,7 @@ const ProfilePage = () => {
         <div>
           <article data-cy="user" key={ user.userId }>
             <p>{user.userId}</p>
-           <p>{user.profilePic}</p>
+            <img src="{user.profilePic}" alt="User's Profile"/>
             <p>Username: {user.username}</p>
           </article>
           
