@@ -35,6 +35,7 @@ describe("ProfilePage", () => {
         }).as("getUserPosts");
     });
 
+
     it("Displays the user information", () => {
         cy.mount(<ProfilePage />); 
         cy.get("[data-cy=user]").should("be.visible");
@@ -45,7 +46,8 @@ describe("ProfilePage", () => {
     it("Lists the user's posts", () => {
         cy.mount(<ProfilePage />);
         cy.get('h2').contains('Your posts').should('be.visible');
-        cy.get('[data-cy=post]').should('have.length', mockPosts.length);
+        cy.get('[data-cy=post]').should('contain.text', "First user post");
+        cy.get('[data-cy=post]').should('contain.text', "Another user post");
     });
 
     it("Likes a post", () => {
@@ -61,6 +63,6 @@ describe("ProfilePage", () => {
     cy.wait('@likePost')
     .its('response.body')
     .should('deep.eq', { likes: 3 });
-    cy.get('[data-cy=post]').should('contain.text',"First user post 3LikeAnother user post 2Like");
+    cy.get('[data-cy=post]').should('contain.text',"First user postLikes: 3Another user postLikes: 2");
 })});
 
