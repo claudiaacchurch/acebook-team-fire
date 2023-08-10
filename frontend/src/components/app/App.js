@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import {Feed }from "../feed/Feed";
 import { useNavigate, Routes, Route } from "react-router-dom";
 import Navbar from '../navbar/Navbar';
-import Profile from '../Profile/profile';
+import ProfilePage from '../profilePage/ProfilePage';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
@@ -23,7 +23,7 @@ const App = () => {
       <Routes>
         <Route path="/posts" element={<Feed navigate={useNavigate()} />} />
         <Route path="/login" element={<LoginForm navigate={useNavigate()} />} />
-        <Route path="/profile" element={<Profile navigate={useNavigate()} />} />
+        <Route path="/profile" element={<ProfilePage navigate={useNavigate()} />} />
         <Route
           path="/signup"
           element={<SignUpForm navigate={useNavigate()} />}
