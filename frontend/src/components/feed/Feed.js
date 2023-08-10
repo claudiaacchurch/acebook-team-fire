@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Post from "../post/Post";
 import Grid from "@mui/material/Grid";
 import Navbar from "../navbar/Navbar";
@@ -51,22 +51,15 @@ const CreatePost = ({ setPosts, token, setToken }) => {
     
     })};
   };
+
   return (
     <Grid>
       <Card style={{ maxWidth: 400, padding: "", margin: "10px auto" }}>
         <CardContent>
-          {/* <Typography
-            variant="body2"
-            color="textSecondary"
-            component="p"
-            gutterBottom
-          >
-            What's on your mind?
-          </Typography> */}
           <form>
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <TextField
+                <TextField id='message'
                   onChange={(e) => updateMessage(e.target.value)}
                   multiline
                   rows={2}
@@ -77,7 +70,7 @@ const CreatePost = ({ setPosts, token, setToken }) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
+                <TextField id="image"
                   onChange={(e) => {
                     updateImage(e.target.value);
                   }}
@@ -89,7 +82,7 @@ const CreatePost = ({ setPosts, token, setToken }) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button
+                <Button id="submit"
                   onClick={submitPost}
                   type="submit"
                   variant="contained"
@@ -113,7 +106,7 @@ const CreatePost = ({ setPosts, token, setToken }) => {
 const Feed = ({ navigate }) => {
   const [posts, setPosts] = useState([]);
   const [token, setToken] = useState(window.localStorage.getItem("token"));
-
+  
   useEffect(() => {
     if (token) {
       fetch("/posts", {
@@ -144,29 +137,25 @@ const Feed = ({ navigate }) => {
       },
       body: JSON.stringify({ likes: post.likes})
     });
-
     if (response.status === 200 || response.status === 201 || response.status === 204) {
       let data = await response.json();
-
-
       const updatedPosts = posts.map(p => {
         if (p._id === post._id) {
-          return { ...p, likes: p.likes + 1}; 
+          return { ...p, likes: p.likes + 1};
         }
         return p;
       });
-
-      setPosts(updatedPosts); 
-
+      setPosts(updatedPosts);
       window.localStorage.setItem("token", data.token);
       setToken(window.localStorage.getItem("token"));
       navigate('/posts')
-
     } else {
       console.log(response.status);
       throw new Error("Like not added");
     }
   };
+
+
 
   if (token) {
     return (
@@ -197,6 +186,7 @@ const Feed = ({ navigate }) => {
       </>
     );
   } else {
+    
     navigate("/login");
   }
 };

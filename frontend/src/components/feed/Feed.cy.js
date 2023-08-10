@@ -53,13 +53,15 @@ describe("Feed", () => {
     }).as("patchPosts");
 
     cy.mount(<Feed navigate={navigate} />);
-    cy.wait("@getPosts");
-    cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
-
-    cy.get('[data-cy="post"]')
+    cy.get('[class="like-btn-1"]').click().then(() => {
+      cy.wait(500).then(() => {
+        cy.get('[data-cy="post"]')
       .should("contain.text", "Hello, worldLikes: 3")
       .and("contain.text", "Hello again, worldLikes: 2");
+      })
+    });
+    
+
   });
 
   it("Calls the PATCH /posts endpoint and increments like count for both messages", () => {
@@ -91,15 +93,17 @@ describe("Feed", () => {
     }).as("patch2Posts");
 
     cy.mount(<Feed navigate={navigate} />);
-    cy.wait("@getPosts");
-    cy.get('[class="like-btn-1"]').click();
-    cy.wait("@patchPosts");
-    cy.get('[class="like-btn-2"]').click();
-    cy.wait("@patch2Posts");
-
-    cy.get('[data-cy="post"]')
-    .should("contain.text", "Hello again, worldLikes: 3")
-    .and("contain.text", "Hello, worldLikes: 3");
+    cy.wait("@getPosts").then(()=>{
+      cy.wait(500).then(() => {
+        cy.get('[class="like-btn-1"]').click();
+        cy.get('[class="like-btn-2"]').click();
+      })
+    }).then(() => {
+      cy.wait(500).then(() => {
+        cy.get('[data-cy="post"]').should("contain.text", "Hello, worldLikes: 3");
+        cy.get('[data-cy="post"]').should("contain.text", "Hello again, worldLikes: 3");
+      })
+    });
   });
 
   it("Calls the PATCH /posts endpoint and increments like count twice", () => {

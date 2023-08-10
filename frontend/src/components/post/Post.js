@@ -1,12 +1,29 @@
-import React from "react";
+import React, {useState} from 'react';
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
+import CommentForm from '../commentForm/CommentForm';
 
 const Post = ({ post, updateLikes }) => {
+  const [token, setToken] = useState(window.localStorage.getItem("token"));
+
+  const submitComment = async (commentText) => {
+    let response = await fetch('/users/@me', {method: 'GET',headers: {'Authorization': `Bearer ${token}`}});
+    let data = await response.json();
+    window.localStorage.setItem("token", data.token);
+    setToken(window.localStorage.getItem("token"));
+    const comment = {text: commentText, authorName: data.username, commentDate: new Date()};
+    response = await fetch(`/posts/${post._id}`, 
+                          {method: 'PATCH', 
+                          headers: {
+                            'Content-type' : "application/json",
+                            'Authorization': `Bearer ${token}`}, 
+                          body: JSON.stringify({'comments':comment})});
+  }
+
   if (post.image) {
     return (
       <Card
@@ -38,6 +55,7 @@ const Post = ({ post, updateLikes }) => {
             />
               <button className={"like-btn-"+ post._id}
               onClick={() => updateLikes(post)}>Like</button>
+              <CommentForm submitComment = {submitComment}/>
           </CardContent>
         </CardActionArea>
       </Card>
@@ -61,6 +79,7 @@ const Post = ({ post, updateLikes }) => {
             </Typography>
           <button className={"like-btn-"+ post._id}
               onClick={() => updateLikes(post)}>Like</button>
+              <CommentForm submitComment = {submitComment}/>
           </CardContent>
         </CardActionArea>
       </Card>
@@ -68,5 +87,6 @@ const Post = ({ post, updateLikes }) => {
   }
 };
 
-export default Post;
 
+
+export default Post;

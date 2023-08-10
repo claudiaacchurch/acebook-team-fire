@@ -1,13 +1,19 @@
 import React from 'react';
+import Navbar from '../navbar/Navbar';
 
-function Profile() {
 
-  return (
+const Profile = ({ navigate }) => {
+
+    return (
     <div>
+        <Navbar navigate={navigate} />
+        
     Username: {}
     Email: {}
     </div>
-  );
+    );
 }
+
+
 
 export default Profile;

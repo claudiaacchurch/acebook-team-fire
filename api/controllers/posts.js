@@ -13,6 +13,7 @@ const PostsController = {
         message: post.message,
         image: post.image,
         likes: post.likes,
+        comments: post.comments,
         user: {id: user.id, username: user.username, profilePic: user.profilePic} };
     }));
 
@@ -61,9 +62,24 @@ UpdateById: (req, res) => {
       const token = TokenGenerator.jsonwebtoken(req.user_id);
       res.status(201).json({ message: 'OK', token: token});
     });
+  } else {
+    if (err) {
+      throw err;
+    }
   }
-}
-
+},
+DeleteById: (req, res) => {
+  const token = req.headers.authorization.replace("Bearer ", "");
+  const { user_id: userId } = TokenGenerator.verify(token);
+  const postId = req.params.id;
+    Post.deleteOne({ _id: postId }, (err) => {
+      if (err) {
+        throw err;
+      }
+      const token = TokenGenerator.jsonwebtoken(req.user_id);
+      res.status(201).json({ message: "OK", token: token });
+    });
+  }
 };
 
 module.exports = PostsController;
