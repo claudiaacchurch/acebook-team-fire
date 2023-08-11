@@ -118,14 +118,17 @@ const Feed = ({ navigate }) => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
-        .then((response) => response.json())
-        .then(async (data) => {
+      }).then((response) => {
+        if (response.status !== 200) {
+          navigate("/login");
+        }
+        response.json().then(async (data) => {
           window.localStorage.setItem("token", data.token);
           setToken(window.localStorage.getItem("token"));
           const postData = data.posts ? data.posts.reverse() : [];
           setPosts(postData);
         });
+      });
     } else {
       navigate("/login");
     }
