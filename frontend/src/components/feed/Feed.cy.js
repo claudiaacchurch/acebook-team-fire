@@ -10,7 +10,7 @@ describe("Feed", () => {
   it("Calls the /posts endpoint and lists all the posts", () => {
     window.localStorage.setItem("token", "fakeToken");
 
-    cy.intercept("GET", "/posts", (req) => {
+    cy.intercept("GET", "/api/posts", (req) => {
       req.reply({
         statusCode: 200,
         body: {
@@ -33,7 +33,7 @@ describe("Feed", () => {
 
   it("Calls the PATCH /posts endpoint and increments like count", () => {
     window.localStorage.setItem("token", "fakeToken");
-    cy.intercept("GET", "/posts", (req) => {
+    cy.intercept("GET", "/api/posts", (req) => {
       req.reply({
         statusCode: 200,
         body: {
@@ -45,7 +45,7 @@ describe("Feed", () => {
       });
     }).as("getPosts");
 
-    cy.intercept("PATCH", "/posts/1", (req) => {
+    cy.intercept("PATCH", "/api/posts/1", (req) => {
       req.reply({
         statusCode: 200,
         body: { likes: 3 },
@@ -66,7 +66,7 @@ describe("Feed", () => {
 
   it("Calls the PATCH /posts endpoint and increments like count for both messages", () => {
     window.localStorage.setItem("token", "fakeToken");
-    cy.intercept("GET", "/posts", (req) => {
+    cy.intercept("GET", "/api/posts", (req) => {
       req.reply({
         statusCode: 200,
         body: {
@@ -78,14 +78,14 @@ describe("Feed", () => {
       });
     }).as("getPosts");
 
-    cy.intercept("PATCH", "/posts/1", (req) => {
+    cy.intercept("PATCH", "/api/posts/1", (req) => {
       req.reply({
         statusCode: 200,
         body: { likes: 3 },
       });
     }).as("patchPosts");
 
-    cy.intercept("PATCH", "/posts/2", (req) => {
+    cy.intercept("PATCH", "/api/posts/2", (req) => {
       req.reply({
         statusCode: 200,
         body: { likes: 3 },
@@ -108,7 +108,7 @@ describe("Feed", () => {
 
   it("Calls the PATCH /posts endpoint and increments like count twice", () => {
     window.localStorage.setItem("token", "fakeToken");
-    cy.intercept("GET", "/posts", (req) => {
+    cy.intercept("GET", "/api/posts", (req) => {
       req.reply({
         statusCode: 200,
         body: {
@@ -120,7 +120,7 @@ describe("Feed", () => {
       });
     }).as("getPosts");
 
-    cy.intercept("PATCH", "/posts/1", (req) => {
+    cy.intercept("PATCH", "/api/posts/1", (req) => {
       req.reply({
         statusCode: 200,
         body: { likes: 3 },
@@ -148,7 +148,7 @@ describe("CreatePost",() =>{
     //set fake token to simulate authentication
     window.localStorage.setItem("token","fakeToken")
     //mock the successful response
-    cy.intercept('POST', '/posts',(req) =>{
+    cy.intercept('POST', '/api/posts',(req) =>{
         req.reply({
           statusCode: 201, 
           body:{ message: "OK" , token: "newFakeToken"},

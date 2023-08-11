@@ -36,11 +36,11 @@ describe("Post", () => {
 
 describe("submitComment" ,() => {
   it('fetches patch /posts with correct, datetime, authorid, message and postID', () => {
-    cy.intercept('GET', 'users/@me', {
+    cy.intercept('GET', '/api/users/@me', {
       statusCode: 200,
       body: {username: "Barry123"}
     });
-    cy.intercept('PATCH', 'posts/15', {
+    cy.intercept('PATCH', '/api/posts/15', {
       statusCode: 200
     }).as('post-posts');
     let mockDate = new Date(2023, 5, 27, 9, 56, 16);

@@ -26,7 +26,7 @@ const Post = ({ post, updateLikes }) => {
 
 
   const submitComment = async (commentText) => {
-    let response = await fetch("/users/@me", {
+    let response = await fetch("/api/users/@me", {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -38,9 +38,7 @@ const Post = ({ post, updateLikes }) => {
       authorName: data.username,
       commentDate: new Date(),
     };
-    // more educational content for hook usage.
-    setLastComment(comment);
-    response = await fetch(`/posts/${post._id}`, {
+    response = await fetch(`/api/posts/${post._id}`, {
       method: "PATCH",
       headers: {
         "Content-type": "application/json",
