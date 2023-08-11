@@ -18,7 +18,7 @@ describe("/users", () => {
   describe("POST, when email and password and username are provided", () => {
     test("the response code is 201", async () => {
       let response = await request(app)
-        .post("/users")
+        .post("/api/users")
         .send({
           email: "poppy@email.com",
           password: "1234",
@@ -29,7 +29,7 @@ describe("/users", () => {
 
     test("a user is created", async () => {
       await request(app)
-        .post("/users")
+        .post("/api/users")
         .send({
           email: "scarlett@email.com",
           password: "1234",
@@ -42,7 +42,7 @@ describe("/users", () => {
 
     test("when user created profile pic added ", async () => {
       await request(app)
-        .post("/users")
+        .post("/api/users")
         .send({
           email: "scarlett@email.com",
           password: "1234",
@@ -57,7 +57,7 @@ describe("/users", () => {
 
     test("username added", async () => {
       await request(app)
-        .post("/users")
+        .post("/api/users")
         .send({
           email: "scarlett@email.com",
           password: "1234",
@@ -72,14 +72,14 @@ describe("/users", () => {
   describe("POST, when password and username is missing", () => {
     test("response code is 400", async () => {
       let response = await request(app)
-        .post("/users")
+        .post("/api/users")
         .send({ email: "skye@email.com" });
       expect(response.statusCode).toBe(400);
     });
 
     test("does not create a user when password is missing", async () => {
       await request(app)
-        .post("/users")
+        .post("/api/users")
         .send({ email: "skye@email.com", username: "myusername" });
       let users = await User.find();
       expect(users.length).toEqual(0);
@@ -87,7 +87,7 @@ describe("/users", () => {
 
     test("does not create a user when username is missing", async () => {
       await request(app)
-        .post("/users")
+        .post("/api/users")
         .send({ email: "skye@email.com", password: "hello" });
       let users = await User.find();
       expect(users.length).toEqual(0);
@@ -118,7 +118,7 @@ describe("/users", () => {
 
     test("response data is correct", async () => {
       const response = await request(app)
-        .get("/users/@me")
+        .get("/api/users/@me")
         .set("Authorization", `Bearer ${token}`)
         .send({token:token});
 
@@ -132,13 +132,13 @@ describe("/users", () => {
   describe("POST, when email is missing", () => {
     test("response code is 400", async () => {
       let response = await request(app)
-        .post("/users")
+        .post("/api/users")
         .send({ password: "1234" });
       expect(response.statusCode).toBe(400);
     });
 
     test("does not create a user", async () => {
-      await request(app).post("/users").send({ password: "1234" });
+      await request(app).post("/api/users").send({ password: "1234" });
       let users = await User.find();
       expect(users.length).toEqual(0);
     });
@@ -172,7 +172,7 @@ describe("GET /users/:id", () => {
 
   test("should return user info when authenticated and id matches", async () => {
     let response = await request(app) //defining the response -> to app -> route setup /users (happens in 101)
-      .get(`/users/${user.id}`) // get request
+      .get(`/api/users/${user.id}`) // get request
       .set("Authorization", `Bearer ${token}`); // sets the authorization header using the token
     expect(response.statusCode).toEqual(200);
     expect(response.body.email).toEqual("test@test.com");
@@ -181,19 +181,19 @@ describe("GET /users/:id", () => {
 
   test("non existant id", async () => {
     let response = await request(app)
-      .get(`/users/${mongoose.Types.ObjectId()}`)
+      .get(`/api/users/${mongoose.Types.ObjectId()}`)
       .set("Authorization", `Bearer ${token}`);
     expect(response.statusCode).toEqual(404);
   });
 
   test("no token", async () => {
-    let response = await request(app).get(`/users/${user.id}`);
+    let response = await request(app).get(`/api/users/${user.id}`);
     expect(response.statusCode).toEqual(401);
   });
 
   test("no token and unauthorised user", async () => {
     let response = await request(app).get(
-      `/users/${mongoose.Types.ObjectId()}`
+      `/api/users/${mongoose.Types.ObjectId()}`
     );
     expect(response.statusCode).toEqual(401);
   });

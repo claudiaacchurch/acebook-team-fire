@@ -33,7 +33,7 @@ describe("/posts", () => {
   describe("POST, when token is present", () => {
     test("responds with a 201", async () => {
       let response = await request(app)
-        .post("/posts")
+        .post("/api/posts")
         .set("Authorization", `Bearer ${token}`)
         .send({ message: "hello world", token: token });
       expect(response.status).toEqual(201);
@@ -41,7 +41,7 @@ describe("/posts", () => {
   
     test("creates a new post", async () => {
       await request(app)
-        .post("/posts")
+        .post("/api/posts")
         .set("Authorization", `Bearer ${token}`)
         .send({ message: "hello world", image:"picture.jpg", comments:[], token: token });
       let posts = await Post.find().lean();
@@ -53,7 +53,7 @@ describe("/posts", () => {
   
     test("returns a new token", async () => {
       let response = await request(app)
-        .post("/posts")
+        .post("/api/posts")
         .set("Authorization", `Bearer ${token}`)
         .send({ message: "hello world", token: token })
       let newPayload = JWT.decode(response.body.token, process.env.JWT_SECRET);
@@ -65,14 +65,14 @@ describe("/posts", () => {
   describe("POST, when token is missing", () => {
     test("responds with a 401", async () => {
       let response = await request(app)
-        .post("/posts")
+        .post("/api/posts")
         .send({ message: "hello again world" });
       expect(response.status).toEqual(401);
     });
   
     test("a post is not created", async () => {
       await request(app)
-        .post("/posts")
+        .post("/api/posts")
         .send({ message: "hello again world" });
       let posts = await Post.find();
       expect(posts.length).toEqual(0);
@@ -80,7 +80,7 @@ describe("/posts", () => {
   
     test("a token is not returned", async () => {
       let response = await request(app)
-        .post("/posts")
+        .post("/api/posts")
         .send({ message: "hello again world" });
       expect(response.body.token).toEqual(undefined);
     });
@@ -89,15 +89,15 @@ describe("/posts", () => {
   describe("GET, when token is present", () => {
     test("returns every post in the collection", async () => {
     await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "second world", image: "picture.jpg", token: token });
       let response = await request(app)
-        .get("/posts")
+        .get("/api/posts")
         .set("Authorization", `Bearer ${token}`)
         .send({token: token});
       let messages = response.body.posts.map((post) => ( post.message ));
@@ -107,11 +107,11 @@ describe("/posts", () => {
 
     test("the response code is 200", async () => {
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       let response = await request(app)
-        .get("/posts")
+        .get("/api/posts")
         .set("Authorization", `Bearer ${token}`)
         .send({token: token});
       expect(response.status).toEqual(200);
@@ -119,11 +119,11 @@ describe("/posts", () => {
 
     test("returns a new token", async () => {
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       let response = await request(app)
-        .get("/posts")
+        .get("/api/posts")
         .set("Authorization", `Bearer ${token}`)
         .send({token: token});
       let newPayload = JWT.decode(response.body.token, process.env.JWT_SECRET);
@@ -135,22 +135,22 @@ describe("/posts", () => {
   describe("GET, when token is missing", () => {
     test("returns no posts", async () => {
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       let response = await request(app)
-        .get("/posts");
+        .get("/api/posts");
       expect(response.body.posts).toEqual(undefined);
     })
   });
 
     test("the response code is 401", async () => {
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       let response = await request(app)
-        .get("/posts");
+        .get("/api/posts");
       expect(response.status).toEqual(401);
     })
 
@@ -159,13 +159,13 @@ describe("/posts", () => {
     test("updates correct post collection", async () => {
       const commentText = "Test Text";
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       let posts = await Post.find();
       const comment = { text: commentText};
       await request(app)
-        .patch(`/posts/${posts[0]._id}`)
+        .patch(`/api/posts/${posts[0]._id}`)
         .set("Authorization", `Bearer ${token}`)
         .send({comments: comment ,token: token});
       posts = await Post.find();
@@ -177,12 +177,12 @@ describe("/posts", () => {
     test("the response code is 401", async () => {
       const comment = {"text": "Test Text"};
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       let posts = await Post.find();
       let response = await request(app)
-        .patch(`/posts/${posts[posts.length -1]._id}`)
+        .patch(`/api/posts/${posts[posts.length -1]._id}`)
         .send({ id: posts[0]._id, comments: comment ,token: token});
       expect(response.status).toEqual(401);
     })
@@ -192,12 +192,12 @@ describe("/posts", () => {
     test("returns 201 and comment length to equal 1", async () => {
       const comment = {"text": "Test Text"};
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       let posts = await Post.find();
       let response = await request(app)
-        .patch(`/posts/${posts[posts.length -1]._id}`)
+        .patch(`/api/posts/${posts[posts.length -1]._id}`)
         .set("Authorization", `Bearer ${token}`)
         .send({comments: comment ,token: token});
       let secondPosts = await Post.find();
@@ -210,12 +210,12 @@ describe("/posts", () => {
     test("returns the date and time when comment was created", async () => {
       const comment = {"text": "Test Text"};
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       let posts = await Post.find();
       let response = await request(app)
-        .patch(`/posts/${posts[posts.length -1]._id}`)
+        .patch(`/api/posts/${posts[posts.length -1]._id}`)
         .set("Authorization", `Bearer ${token}`)
         .send({comments: comment ,token: token});
       let secondPosts = await Post.find();
@@ -230,12 +230,12 @@ describe("/posts", () => {
   describe("Patch for likes, when token is present", () => {
     test("updates likes count in correct post collection", async () => {
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       let posts = await Post.find();
       let response = await request(app)
-      .patch(`/posts/${posts[posts.length -1]._id}`)
+      .patch(`/api/posts/${posts[posts.length -1]._id}`)
         .set("Authorization", `Bearer ${token}`)
         .send({likes: posts[posts.length - 1].likes, token: token});
       let newPosts = await Post.find();
@@ -247,12 +247,12 @@ describe("/posts", () => {
   describe("Patch for likes, when token is not present", () => {
     test("return status 401", async () => {
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       let posts = await Post.find();
       let response = await request(app)
-      .patch(`/posts/${posts[posts.length -1]._id}`)
+      .patch(`/api/posts/${posts[posts.length -1]._id}`)
         .send({likes: 10 ,token: token});
       posts = await Post.find();
       expect(posts[0].likes).toEqual(0);
@@ -263,12 +263,12 @@ describe("/posts", () => {
   describe("Delete post by id", () => {
     test("delete's post for the given id ", async () => {
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       let posts = await Post.find();
       let response = await request(app)
-      .delete(`/posts/${posts[posts.length -1]._id}`)
+      .delete(`/api/posts/${posts[posts.length -1]._id}`)
         .set("Authorization", `Bearer ${token}`)
       let newPosts = await Post.find();
       expect(newPosts.length).toEqual(0);
@@ -276,16 +276,16 @@ describe("/posts", () => {
 
     test("delete's post for the given id and the other remains", async () => {
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "test 2", image: "picture.jpg", token: token });
       let posts = await Post.find();
       let response = await request(app)
-      .delete(`/posts/${posts[posts.length -1]._id}`)
+      .delete(`/api/posts/${posts[posts.length -1]._id}`)
         .set("Authorization", `Bearer ${token}`)
       let newPosts = await Post.find();
       console.log("POSTS", newPosts)
@@ -295,12 +295,12 @@ describe("/posts", () => {
 
   test("get post by user Id", async () => {
     await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "new world", image: "picture.jpg", token: token });
       let posts = await Post.find();
       let response = await request(app)
-      .get(`/posts/user/${posts[posts.length -1].user}`)
+      .get(`/api/posts/user/${posts[posts.length -1].user}`)
         .set("Authorization", `Bearer ${token}`)
       let newPosts = await Post.find();
       expect(newPosts.length).toEqual(1);
@@ -311,7 +311,7 @@ describe("/posts", () => {
 
   test("creates a new post associated with user", async () => {
     await request(app)
-      .post("/posts")
+      .post("/api/posts")
       .set("Authorization", `Bearer ${token}`)
       .send({ message: "hello world", image:"picture.jpg",  token: token });
     let posts = await Post.find();
@@ -324,12 +324,12 @@ describe("/posts", () => {
 //test get post with user details 
   test("gets post with username and profilePic", async () => {
     await request(app)
-    .post("/posts")
+    .post("/api/posts")
     .set("Authorization", `Bearer ${token}`)
     .send({ message: "new world", image: "picture.jpg", token: token });
     
     const response = await request(app)
-      .get("/posts")
+      .get("/api/posts")
       .set("Authorization", `Bearer ${token}`);
   
     expect(response.status).toEqual(200);
