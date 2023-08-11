@@ -18,14 +18,14 @@ describe("ProfilePage", () => {
     beforeEach(() => {
         window.localStorage.setItem("token", "fakeToken");
 
-        cy.intercept("GET", "/users/@me", (req) => {
+        cy.intercept("GET", "/api/users/@me", (req) => {
             req.reply({
                 statusCode: 200,
                 body: mockUser
             });
         }).as("getUser");
 
-        cy.intercept("GET", `/posts/user/${mockUser.userId}`, (req) => {
+        cy.intercept("GET", `/api/posts/user/${mockUser.userId}`, (req) => {
             req.reply({
                 statusCode: 200,
                 body: {
@@ -51,7 +51,7 @@ describe("ProfilePage", () => {
     });
 
     it("Likes a post", () => {
-        cy.intercept("PATCH", `/posts/1`, (req) => {
+        cy.intercept("PATCH", `/api/posts/1`, (req) => {
         req.reply({
             statusCode: 200,
             body: { likes: 3 }

@@ -28,9 +28,9 @@ app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 
 // route setup
-app.use("/posts", tokenChecker, postsRouter);
-app.use("/tokens", authenticationRouter);
-app.use("/users", usersRouter);
+app.use("/api/posts", tokenChecker, postsRouter);
+app.use("/api/tokens", authenticationRouter);
+app.use("/api/users", usersRouter);
 
 
 // When in production the backend will forward all requests to the production client, (which doesn't live on a server)

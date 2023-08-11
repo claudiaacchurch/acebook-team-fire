@@ -8,7 +8,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const response = await fetch("/users/@me", {
+      const response = await fetch("/api/users/@me", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -28,7 +28,7 @@ const ProfilePage = () => {
   }, []);
 
   const getUserPosts = async (user) => {
-    let response = await fetch(`/posts/user/${user.userId}`, {
+    let response = await fetch(`/api/posts/user/${user.userId}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -50,7 +50,7 @@ const ProfilePage = () => {
   };
 
   const updateLikes = async (post) => {
-    let response = await fetch(`/posts/${post._id}`, {
+    let response = await fetch(`/api/posts/${post._id}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
