@@ -99,11 +99,12 @@ const Post = ({ post, updateLikes }) => {
             <Grid container spacing={1} alignItems="center">
               <Grid item>
                 <p>
-                  <b>{post.likes}</b>
+                  <b data-cy="likes">{post.likes}</b>
                 </p>
               </Grid>
               <Grid item>
                 <ThumbUpIcon
+                  data-cy="like-button"
                   className={"like-btn-" + post._id}
                   onClick={() => updateLikes(post)}
                   sx={{ marginRight: 3 }}
@@ -154,7 +155,7 @@ const Post = ({ post, updateLikes }) => {
             </Typography>
             <Grid container spacing={1} alignItems="center">
               <Grid item>
-                <p>
+                <p className={"like-counter"}>
                   <b data-cy="likes">{post.likes}</b>
                 </p>
               </Grid>
