@@ -27,14 +27,16 @@ const Navbar = () => {
         <Button color="inherit" component={Link} to="/posts">
           Feed
         </Button>
-        <Button color="inherit" component={Link} to="/profile">
-          Profile
-        </Button>
         
         { isAuthenticated ? (
+          <>
+          <Button color="inherit" component={Link} to="/profile">
+           Profile
+         </Button>
           <Button onClick={handleClick} color="inherit" component={Link} to="/login">
             Logout
           </Button>
+         </>
         ) : (
           <>
           <Button color="inherit" component={Link} to="/signup">
