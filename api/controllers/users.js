@@ -26,7 +26,6 @@ const UsersController = {
         res.status(200).json({ username: user.username, email: user.email });
       }
     } catch (error) {
-      console.error(error);
       res.status(500).json({ message: "server error" });
     }
   },
@@ -44,6 +43,30 @@ const UsersController = {
         res.status(200).json({userId : _id, email: email, username: username, profilePic: profilePic, token : token});
       }
     });
+  },
+
+  Edit: (req, res) => {
+    const token = req.headers.authorization.replace("Bearer ", "");
+    const { user_id } = TokenGenerator.verify(token);
+    let updatedDetail = {}
+    if (req.body.hasOwnProperty('email')) {
+      updatedDetail = {email: req.body.email}
+    } else if (req.body.hasOwnProperty('username')) {
+      updatedDetail = {username: req.body.username}
+    } else if (req.body.hasOwnProperty('profilePic')){
+      updatedDetail = {profilePic: req.body.profilePic}
+    }else {
+      res.status(404).json({ message: "property not found" });
+      return;
+    }
+    User.findOneAndUpdate({ _id: user_id }, updatedDetail, (err) => {
+      if (err) {
+        throw err;
+      }
+      const token = TokenGenerator.jsonwebtoken(req.user_id);
+      res.status(200).json({ message: 'OK', token: token });
+    });
+
   },
 };
 

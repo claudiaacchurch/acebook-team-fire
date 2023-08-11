@@ -244,7 +244,6 @@ describe("/posts", () => {
         .set("Authorization", `Bearer ${token}`)
         .send({likes: posts[posts.length - 1].likes, token: token});
       let newPosts = await Post.find();
-      console.log("POSTS", newPosts[newPosts.length -1])
       expect(newPosts[newPosts.length -1].likes).toEqual(posts[posts.length -1].likes + 1);
     })
   })
@@ -293,7 +292,6 @@ describe("/posts", () => {
       .delete(`/posts/${posts[posts.length -1]._id}`)
         .set("Authorization", `Bearer ${token}`)
       let newPosts = await Post.find();
-      console.log("POSTS", newPosts)
       expect(newPosts[newPosts.length -1].message).toEqual("new world");
     })
   })
