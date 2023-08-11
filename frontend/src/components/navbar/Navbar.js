@@ -26,17 +26,18 @@ const Navbar = () => {
         </Typography>
         <Button color="inherit" component={Link} to="/posts">
           Feed
-        </Button>
-        { isAuthenticated ? (
-        <>
-        <Button color="inherit" component={Link} to="/profile">
-          Profile
-        </Button>
-        <Button onClick={handleClick} color="inherit" component={Link} to="/login">
-          Logout
-        </Button>
-        </>
 
+        </Button>
+        
+        { isAuthenticated ? (
+          <>
+          <Button color="inherit" component={Link} to="/profile">
+           Profile
+         </Button>
+          <Button onClick={handleClick} color="inherit" component={Link} to="/login">
+            Logout
+          </Button>
+         </>
         ) : (
           <>
           <Button color="inherit" component={Link} to="/signup">
@@ -54,3 +55,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
