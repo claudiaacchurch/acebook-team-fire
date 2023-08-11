@@ -37,15 +37,17 @@ const PostsController = {
   },
 
 
-UpdateById: (req, res) => {
+UpdateById: async (req, res) => {
   const token = req.headers.authorization.replace("Bearer ", "");
   const { user_id: authorId } = TokenGenerator.verify(token);
   const postId = req.params.id; 
+  const user = await User.findById(authorId)
   if (req.body.hasOwnProperty('comments')) {
     const comment = {
       text: req.body.comments.text,
       authorId: authorId,
-      commentDate: new Date()
+      commentDate: new Date(),
+      username: user.username
     };
     Post.updateOne({ _id: postId }, { $push: { comments: comment } }, (err) => {
       if (err) {

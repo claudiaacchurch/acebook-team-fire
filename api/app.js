@@ -23,12 +23,17 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 
+
 // route setup
 app.use("/api/posts", tokenChecker, postsRouter);
 app.use("/api/tokens", authenticationRouter);
 app.use("/api/users", usersRouter);
 
 // When in production the backend will forward all requests to the production client, (which doesn't live on a server)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "../frontend/build/index.html"))
+})
+
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "/../frontend/build/index.html"));

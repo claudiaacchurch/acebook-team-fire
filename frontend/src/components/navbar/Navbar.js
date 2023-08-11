@@ -26,6 +26,7 @@ const Navbar = () => {
         </Typography>
         <Button color="inherit" component={Link} to="/posts">
           Feed
+
         </Button>
         
         { isAuthenticated ? (
