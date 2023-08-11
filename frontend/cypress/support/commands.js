@@ -35,7 +35,7 @@ Cypress.Commands.add('deleteAllPosts', () => {
     const token = win.localStorage.getItem('token');
   cy.request({
     method: 'GET',
-    url: '/posts',
+    url: '/api/posts',
     headers: {
         'Authorization': `Bearer ${token}`
     }
@@ -45,7 +45,7 @@ Cypress.Commands.add('deleteAllPosts', () => {
     allPostIds.forEach(postId => {
       cy.request({
         method: 'DELETE',
-        url: `/posts/${postId}`,
+        url: `/api/posts/${postId}`,
         headers: {
           'Authorization': `Bearer ${token}`
         }
