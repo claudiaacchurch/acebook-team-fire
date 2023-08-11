@@ -33,6 +33,7 @@ app.use("/tokens", authenticationRouter);
 app.use("/users", usersRouter);
 
 
+
 // When in production the backend will forward all requests to the production client, (which doesn't live on a server)
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname + "../frontend/build/index.html"))
