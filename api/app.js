@@ -5,7 +5,6 @@ const logger = require("morgan");
 const JWT = require("jsonwebtoken");
 const mongoose = require('mongoose');
 const cors = require('cors');
-require("dotenv").config()
 
 
 const postsRouter = require("./routes/posts");
