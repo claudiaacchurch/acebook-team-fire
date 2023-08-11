@@ -19,7 +19,7 @@ const SignUpForm = ({ navigate }) => {
   const buttonRef = useRef();
 
   const setTokens = async () => {
-    let response = await fetch( '/tokens', {
+    let response = await fetch( '/api/tokens', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ const SignUpForm = ({ navigate }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    fetch( '/users', {
+    fetch( '/api/users', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',

@@ -14,7 +14,7 @@ const Post = ({ post, updateLikes }) => {
   const [token, setToken] = useState(window.localStorage.getItem("token"));
 
   const submitComment = async (commentText) => {
-    let response = await fetch("/users/@me", {
+    let response = await fetch("/api/users/@me", {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -26,7 +26,7 @@ const Post = ({ post, updateLikes }) => {
       authorName: data.username,
       commentDate: new Date(),
     };
-    response = await fetch(`/posts/${post._id}`, {
+    response = await fetch(`/api/posts/${post._id}`, {
       method: "PATCH",
       headers: {
         "Content-type": "application/json",

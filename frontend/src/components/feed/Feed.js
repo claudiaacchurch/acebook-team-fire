@@ -21,7 +21,7 @@ const CreatePost = ({ setPosts, token, setToken }) => {
     if (!message && !image) {
       setError("There is no content!");
     } else {
-      fetch("/posts", {
+      fetch("/api/posts", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -91,7 +91,6 @@ const CreatePost = ({ setPosts, token, setToken }) => {
                   color="primary"
                   fullWidth
                 >
-                  
                   <b>POST</b>
                 </Button>
               </Grid>
@@ -115,7 +114,7 @@ const Feed = ({ navigate }) => {
 
   useEffect(() => {
     if (token) {
-      fetch("/posts", {
+      fetch("/api/posts", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -124,7 +123,7 @@ const Feed = ({ navigate }) => {
         .then(async (data) => {
           window.localStorage.setItem("token", data.token);
           setToken(window.localStorage.getItem("token"));
-          const postData = data.posts?data.posts.reverse():[];
+          const postData = data.posts ? data.posts.reverse() : [];
           setPosts(postData);
         });
     } else {
@@ -133,7 +132,7 @@ const Feed = ({ navigate }) => {
   }, [navigate, token]);
 
   const updateLikes = async (post) => {
-    let response = await fetch(`/posts/${post._id}`, {
+    let response = await fetch(`/api/posts/${post._id}`, {
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${token}`,
