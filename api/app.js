@@ -19,11 +19,10 @@ app.use(cors())
 
 // setup for receiving JSON
 app.use(express.json())
-app.use(express.static())
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../frontend/build")));
 
 
 
@@ -36,7 +35,7 @@ app.use("/users", usersRouter);
 
 // When in production the backend will forward all requests to the production client, (which doesn't live on a server)
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/build/index.html"))
+  res.sendFile(path.join(__dirname + "../frontend/build/index.html"))
 })
 
 // catch 404 and forward to error handler
