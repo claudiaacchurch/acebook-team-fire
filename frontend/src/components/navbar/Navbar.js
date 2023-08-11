@@ -36,6 +36,7 @@ const Navbar = () => {
           Logout
         </Button>
         </>
+
         ) : (
           <>
           <Button color="inherit" component={Link} to="/signup">

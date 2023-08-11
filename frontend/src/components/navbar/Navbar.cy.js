@@ -13,6 +13,7 @@ describe('Navbar Component Test', () => {
       </Router>);
     cy.contains("Acebook Fire").should("be.visible");
     cy.contains("Logout").should("be.visible");
+    cy.contains("Profile").should("be.visible");
   });
 
   it('shows login/signup when not authenticated', () => {
@@ -22,5 +23,6 @@ describe('Navbar Component Test', () => {
       </Router>);
     cy.contains("Login").should("be.visible");
     cy.contains("Signup").should("be.visible");
+    cy.contains('Profile').should('not.exist');
   });
 });
