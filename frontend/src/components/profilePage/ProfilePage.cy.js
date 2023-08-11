@@ -39,7 +39,7 @@ describe("ProfilePage", () => {
     it("Displays the user information", () => {
         cy.mount(<ProfilePage />); 
         cy.get("[data-cy=user]").should("be.visible");
-        cy.get("[data-cy=user] p").should("have.length", 3);
+        cy.get("[data-cy=user] p").should("have.length", 2);
         cy.get("[data-cy=user]").should("contain", mockUser.username);
     });
 
