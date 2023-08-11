@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Post from "../post/Post";
-import ProfilePage from "../profilePage/ProfilePage";
 import Grid from "@mui/material/Grid";
 import {
   TextField,
