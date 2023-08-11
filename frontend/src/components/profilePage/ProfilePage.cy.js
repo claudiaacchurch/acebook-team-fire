@@ -11,8 +11,8 @@ describe("ProfilePage", () => {
     };
 
     const mockPosts = [
-        { _id: 1, message: "First user post", likes: 1 },
-        { _id: 2, message: "Another user post", likes: 2 }
+        { _id: 1, message: "First user post", likes: 1 , comments: []},
+        { _id: 2, message: "Another user post", likes: 2 , comments: []}
     ];
 
     beforeEach(() => {

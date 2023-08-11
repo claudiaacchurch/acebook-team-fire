@@ -13,6 +13,7 @@ import Comment from "../comment/Comment";
 
 const Post = ({ post, updateLikes }) => {
   const [token, setToken] = useState(window.localStorage.getItem("token"));
+  const [commentList, setCommentList] = useState(post.comments);
   
   // This is a useless hook which is included for education purposes only
   const [lastComment, setLastComment] = useState("");
@@ -33,10 +34,12 @@ const Post = ({ post, updateLikes }) => {
     let data = await response.json();
     window.localStorage.setItem("token", data.token);
     setToken(window.localStorage.getItem("token"));
+    const currentDate = new Date();
     const comment = {
       text: commentText,
       authorName: data.username,
-      commentDate: new Date(),
+      username: data.username,
+      commentDate: currentDate.toDateString(),
     };
     response = await fetch(`/api/posts/${post._id}`, {
       method: "PATCH",
@@ -46,6 +49,10 @@ const Post = ({ post, updateLikes }) => {
       },
       body: JSON.stringify({ comments: comment }),
     });
+
+    setCommentList(prev =>{
+      return [...prev, comment]
+    })
   };
 
   if (post.image) {
@@ -110,13 +117,13 @@ const Post = ({ post, updateLikes }) => {
               </Grid>
               <Grid item>
                 <CommentForm submitComment={submitComment} />
-                  <div className="post-comments">
-                    {post.comments.map((comment, index) => {
+              </Grid>
+            </Grid>
+            <div className="post-comments" style={{marginTop: "5px"}}>
+                    {commentList.map((comment, index) => {
                       return <Comment index={index} comment={comment} />
                     })}
                   </div>
-              </Grid>
-            </Grid>
           </CardContent>
         </CardActionArea>
       </Card>
@@ -166,8 +173,14 @@ const Post = ({ post, updateLikes }) => {
               </Grid>
               <Grid item sx={12}>
                 <CommentForm submitComment={submitComment} />
+              
               </Grid>
             </Grid>
+            <div className="post-comments" style={{marginTop: "5px"}}>
+                    {commentList.map((comment, index) => {
+                      return <Comment index={index} comment={comment} />
+                    })}
+                  </div>
           </CardContent>
         </CardActionArea>
       </Card>

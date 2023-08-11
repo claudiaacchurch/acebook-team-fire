@@ -38,6 +38,7 @@ const CreatePost = ({ setPosts, token, setToken }) => {
               message,
               image,
               user: { username: "username", profilePic: "https://google.com" },
+              comments: []
             },
             ...prev,
           ]);

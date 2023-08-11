@@ -28,10 +28,32 @@ describe("Post", () => {
     const comment1 = {_id: 1, text: "Hello, world",  username: 'the best author name', commentDate: "2023-01-01"};
     const comment2 = {_id: 2, text: "Bye, world",  username: '123', commentDate: "2023-02-02"};
     cy.mount(<Post post={{_id: 1, message: "Hello, world", likes:5, comments: [comment1, comment2], image: "something"}}/>)
-    cy.get('[data-cy="comment"]').eq(0).should('contain.text', "Hello, worldBy: the best author nameDate: 2023-01-01")
-    cy.get('[data-cy="comment"]').eq(-1).should('contain.text', "Bye, worldBy: 123Date: 2023-02-02")
+    cy.get('[data-cy="comment"]').eq(0).should('contain.text', "Tthe best author nameHello, world")
+    cy.get('[data-cy="comment"]').eq(-1).should('contain.text', "1123Bye, world")
 
   })
+
+  it('submit comment adds to existing comments on page', () => {
+    cy.intercept('GET', '/api/users/@me', {
+      statusCode: 200,
+      body: {username: "Barry123"}
+    });
+    cy.intercept('PATCH', '/api/posts/15', {
+      statusCode: 200
+    }).as('post-posts');
+    const comment1 = {_id: 1, text: "Hello, world",  username: 'the best author name', commentDate: "2023-01-01"};
+    const comment2 = {_id: 2, text: "Bye, world",  username: '123', commentDate: "2023-02-02"};
+    cy.mount(<Post post={{_id: 15, message: "Hello, world", likes:5, comments: [comment1, comment2], image: "something"}}/>)
+    cy.get('[data-cy="comment-text"]').type("I am a comment");
+    cy.get('[data-cy="submit-comment"]').click();
+    cy.get('[data-cy="comment"]').eq(0).should('contain.text', "Tthe best author nameHello, world")
+    cy.get('[data-cy="comment"]').eq(1).should('contain.text', "1123Bye, world")
+    cy.wait("@post-posts").then((interception) =>{
+    cy.get('[data-cy="comment"]').eq(2);
+    cy.get('[data-cy="comment"]').eq(2).contains("I am a comment")
+    })
+  })
+
 })
 
 describe("submitComment" ,() => {
