@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-reqiure("dotenv").config();
+require("dotenv").config();
 
 if (!process.env.JWT_SECRET) {
   console.error("\nThe JWT_SECRET environment variable wasn't set before running the server. Did you forget it?\n\n",
